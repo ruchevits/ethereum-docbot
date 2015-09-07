@@ -121,17 +121,21 @@ function compounddefType(compounddef){
 
     var compound = {
         slug: compounddef.attrs.id,
-        kind: compounddef.attrs.kind,
-        prot: compounddef.attrs.prot,
         parser: 'doxygen',
         body: {}
     };
 
+    // Prot
+    compound.body.prot = compounddef.attrs.prot;
+
+    // Kind
+    compound.body.kind = compounddef.attrs.kind;
+
     // Compound name (1)
-    compound.body.compoundname = compounddef.$('compoundname').text();
+    compound.body.name = compounddef.$('compoundname').text();
 
     // Title (0:1)
-    if (compounddef.$('title')){
+    if (compounddef.$('title').children.length){
         compound.body.title = compounddef.$('title').text();
     }
 
@@ -220,9 +224,9 @@ function compounddefType(compounddef){
      }*/
 
     // Brief description (0:1)
-    /*if (compounddef.$('briefdescription').length){
+    if (compounddef.$('briefdescription').length){
         compound.body.briefdescription = descriptionType(compounddef.$('briefdescription').children[0]);
-    }*/
+    }
 
     // Detailed description (0:1)
     if (compounddef.$('detaileddescription').length){
@@ -595,11 +599,8 @@ function docTitleCmdGroup(element){
         //    console.log(element)
         //    return 0;
 
-        // TODO: ref
-        // docRefTextType
-        //case 'ref':
-        //    console.log(element)
-        //    return 0;
+        case 'ref':
+            return docRefTextType(element);
 
         case 'copy':
         case 'trademark':
@@ -710,6 +711,30 @@ function docCmdGroup(element){
 
 }
 
+function docRefTextType(element){
+
+    var ref = {
+        name: element.name,
+        slug: element.attrs.refid,
+        kind: element.attrs.kindref,
+        external: element.attrs.external,
+        body: []
+    };
+
+    element.children.forEach(function(child){
+
+        if (!child.name) {
+            ref.body.push(child);
+        } else {
+            ref.body.push(docTitleCmdGroup(child));
+        }
+
+    });
+
+    return ref;
+
+}
+
 // TODO: listingType
 function listingType(element){
     return 0;
@@ -753,7 +778,7 @@ function docSect1Type(element){
     };
 
     // Title (1)
-    if (element.$('title')){
+    if (element.$('title').children.length){
         sect1.title = element.$('title').text();
     }
 
@@ -822,7 +847,7 @@ function descriptionType(element){
     var description = {};
 
     // Title (0:1)
-    if (element.$('title')){
+    if (element.$('title').children.length){
         description.title = element.$('title').text();
     }
 
