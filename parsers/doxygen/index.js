@@ -32,8 +32,8 @@ function parse(dirname) {
                  });*/
 
                 /*doxygen.stderr.on('data', function (data) {
-                    reject(data)
-                });*/
+                 reject(data)
+                 });*/
 
                 doxygen.on('exit', function (code) {
                     if (code !== 0) {
@@ -63,8 +63,8 @@ function parse(dirname) {
                 });
 
                 /*xsltproc.stderr.on('data', function (data) {
-                    reject(data);
-                });*/
+                 reject(data);
+                 });*/
 
                 xsltproc.on('exit', function (code) {
                     //console.log(data)
@@ -109,7 +109,7 @@ function parse(dirname) {
 
         }).done(function(){
 
-            // TODO: log
+            logger.info('Doxygen finished working');
 
         });
 
@@ -139,29 +139,35 @@ function compounddefType(compounddef){
         compound.body.title = compounddef.$('title').text();
     }
 
-    // TODO: basecompoundref (0:N)
-    // compoundRefType
-    //compound.body.basecompoundref = 0;
+    // Base compound ref (0:N)
+    if (compounddef.$('basecompoundref').children.length){
+        compound.body.basecompoundref = compoundRefType(compounddef.$('basecompoundref'));
+    }
 
-    // TODO: derivedcompoundref (0:N)
-    // compoundRefType
-    //compound.body.derivedcompoundref = 0;
+    // Derived compound ref (0:N)
+    if (compounddef.$('derivedcompoundref').children.length){
+        compound.body.derivedcompoundref = compoundRefType(compounddef.$('derivedcompoundref'));
+    }
 
-    // TODO: includes (0:N)
-    // incType
-    //compound.body.includes = 0;
+    // Includes (0:N)
+    if (compounddef.$('includes').children.length){
+        compound.body.includes = incType(compounddef.$('includes'));
+    }
 
-    // TODO: includedby (0:N)
-    // incType
-    //compound.body.includedby = 0;
+    // Included by (0:N)
+    if (compounddef.$('includedby').children.length){
+        compound.body.includedby = incType(compounddef.$('includedby'));
+    }
 
-    // TODO: incdepgraph (0:1)
-    // graphType
-    //compound.body.incdepgraph = 0;
+    // Incdepgraph (0:1)
+    if (compounddef.$('incdepgraph').children.length){
+        compound.body.incdepgraph = graphType(compounddef.$('incdepgraph').children[0]);
+    }
 
-    // TODO: invincdepgraph (0:1)
-    // graphType
-    //compound.body.invincdepgraph = 0;
+    // Invincdepgraph (0:1)
+    if (compounddef.$('invincdepgraph').children.length){
+        compound.body.invincdepgraph = graphType(compounddef.$('invincdepgraph').children[0]);
+    }
 
     // Inner directories (0:N)
     if (compounddef.$('innerdir').length){
@@ -211,17 +217,18 @@ function compounddefType(compounddef){
         });
     }
 
-    // TODO: Template param list (0:1)
-    // templateparamlistType
-    //compound.body.templateparamlist = 0;
+    // Template param list (0:1)
+    if (compounddef.$('templateparamlist').children.length){
+        compound.body.templateparamlist = templateparamlistType(compounddef.$('templateparamlist').children[0]);
+    }
 
     // Sections (0:N)
-    /*if (compounddef.$('sectiondef').length){
-     compound.body.sections = [];
-     compounddef.$('sectiondef').forEach(function(sectiondef){
-     compound.body.sections.push(sectiondefType(sectiondef));
-     });
-     }*/
+    if (compounddef.$('sectiondef').length){
+        compound.body.sections = [];
+        compounddef.$('sectiondef').forEach(function(sectiondef){
+            compound.body.sections.push(sectiondefType(sectiondef));
+        });
+    }
 
     // Brief description (0:1)
     if (compounddef.$('briefdescription').length){
@@ -233,26 +240,30 @@ function compounddefType(compounddef){
         compound.body.detaileddescription = descriptionType(compounddef.$('detaileddescription').children[0]);
     }
 
-    // TODO: inheritancegraph (0:1)
-    // graphType
-    //compound.body.inheritancegraph = 0;
+    // Inheritance graph (0:1)
+    if (compounddef.$('inheritancegraph').children.length){
+        compound.body.inheritancegraph = graphType(compounddef.$('inheritancegraph').children[0]);
+    }
 
-    // TODO: collaborationgraph (0:1)
-    // graphType
-    //compound.body.collaborationgraph = 0;
+    // Collaboration graph (0:1)
+    if (compounddef.$('collaborationgraph').children.length){
+        compound.body.collaborationgraph = graphType(compounddef.$('collaborationgraph').children[0]);
+    }
 
-    // TODO: Program listing (0:1)
-    // compound.body.programlisting = listingType(compounddef.$('programlisting').children[0]);
+    // Program listing (0:1)
+    if (compounddef.$('programlisting').children.length){
+        compound.body.programlisting = listingType(compounddef.$('programlisting').children[0]);
+    }
 
-    // TODO: Location (0:1)
-    // locationType
-    // compound.body.location = 0;
+    // Location (0:1)
+    if (compounddef.$('location').children.length){
+        compound.body.location = locationType(compounddef.$('location').children[0]);
+    }
 
-    // listofallmembers (0:1)
-    // TODO: listofallmembersType
-    //compound.body.listofallmembers = 0;
-
-    //console.log('============================================');
+    // List of all members (0:1)
+    if (compounddef.$('listofallmembers').children.length){
+        compound.body.listofallmembers = listofallmembersType(compounddef.$('listofallmembers').children[0]);
+    }
 
     return compound;
 
@@ -266,12 +277,16 @@ function sectiondefType(sectiondef){
     };
 
     // Header (0:1)
-    section.body.header = 0;
+    if (sectiondef.$('header').children.length){
+        section.body.header = sectiondef.$('header').children[0];
+    }
 
     // Description (0:1)
-    section.body.description = 0;
+    if (sectiondef.$('description').length){
+        section.body.description = descriptionType(sectiondef.$('description').children[0]);
+    }
 
-    // Member def (N)
+    // Member definitions (N)
     section.body.members = [];
     sectiondef.$('memberdef').forEach(function(memberdef){
         section.body.members.push(memberdefType(memberdef));
@@ -312,66 +327,271 @@ function memberdefType(memberdef){
     };
 
     // Template param list (0:1)
-    member.body.templateparamlist = 0;
+    if (memberdef.$('templateparamlist').children.length){
+        member.body.templateparamlist = templateparamlistType(memberdef.$('templateparamlist').children[0]);
+    }
 
     // Type (0:1)
-    member.body.type = 0;
+    if (memberdef.$('type').children.length){
+        member.body.type = linkedTextType(memberdef.$('type').children[0]);
+    }
 
-    // Definition (0:1)
-    member.body.definition = 0;
+    // TODO: Definition (0:1)
+    /*if (memberdef.$('definition').children.length){
+        member.body.definition = memberdef.$('definition').children[0];
+    }*/
 
-    // Args string (0:1)
-    member.body.argsstring = 0;
+    // TODO: Args string (0:1)
+    /*if (memberdef.$('argsstring').children.length){
+        member.body.argsstring = memberdef.$('argsstring').children[0];
+    }*/
 
     // Name (1)
-    member.body.name = 0;
+    member.body.name = memberdef.$('name').text();
 
-    // Read (0:1)
-    member.body.read = 0;
+    // TODO: Read (0:1)
+    /*if (memberdef.$('read').children.length){
+        member.body.read = memberdef.$('read').children[0];
+    }*/
 
-    // Write (0:1)
-    member.body.write = 0;
+    // TODO: Write (0:1)
+    /*if (memberdef.$('write').children.length){
+        member.body.write = memberdef.$('write').children[0];
+    }*/
 
-    // Bit field (0:1)
-    member.body.bitfield = 0;
+    // TODO: Bit field (0:1)
+    /*if (memberdef.$('bitfield').children.length){
+        member.body.bitfield = memberdef.$('bitfield').children[0];
+    }*/
 
     // Reimplements (0:N)
-    member.body.reimplements = 0;
+    if (memberdef.$('reimplements').children.length){
+        member.body.reimplements = reimplementType(memberdef.$('reimplements'));
+    }
 
     // Reimplemented by (0:N)
-    member.body.reimplementedby = 0;
+    if (memberdef.$('reimplementedby').children.length){
+        member.body.reimplementedby = reimplementType(memberdef.$('reimplementedby'));
+    }
 
-    // Param (0:N)
-    member.body.param = 0;
+    // Parameters (0:N)
+    if (memberdef.$('param').children.length){
+        member.body.param = paramType(memberdef.$('param'));
+    }
 
     // Enum value (0:N)
-    member.body.enumvalue = 0;
+    if (memberdef.$('enumvalue').children.length){
+        member.body.enumvalue = enumvalueType(memberdef.$('enumvalue'));
+    }
 
     // Initializer (0:1)
-    member.body.initializer = 0;
+    if (memberdef.$('initializer').children.length){
+        member.body.initializer = linkedTextType(memberdef.$('initializer').children[0]);
+    }
 
     // Exceptions (0:1)
-    member.body.exceptions = 0;
+    if (memberdef.$('exceptions').children.length){
+        member.body.exceptions = linkedTextType(memberdef.$('exceptions').children[0]);
+    }
 
     // Brief description (0:1)
-    member.body.briefdescription = 0;
+    if (memberdef.$('briefdescription').length){
+        member.body.briefdescription = descriptionType(memberdef.$('briefdescription').children[0]);
+    }
 
     // Detailed description (0:1)
-    member.body.detaileddescription = 0;
+    if (memberdef.$('detaileddescription').length){
+        member.body.detaileddescription = descriptionType(memberdef.$('detaileddescription').children[0]);
+    }
 
     // In-body description (0:1)
-    member.body.inbodydescription = 0;
+    if (memberdef.$('inbodydescription').length){
+        member.body.inbodydescription = descriptionType(memberdef.$('inbodydescription').children[0]);
+    }
 
     // Location (1)
-    member.body.location = 0;
+    member.body.location = locationType(memberdef.$('location').children[0]);
 
     // References (0:N)
-    member.body.references = 0;
+    if (memberdef.$('references').children.length){
+        member.body.references = referenceType(memberdef.$('references'));
+    }
 
     // Referenced by (0:N)
-    member.body.referencedby = 0;
+    if (memberdef.$('referencedby').children.length){
+        member.body.referencedby = referenceType(memberdef.$('referencedby'));
+    }
+
+    console.log(memberdef)
+    console.log("================================================================================")
 
     return member;
+
+}
+
+
+
+// TODO: referenceType
+function referenceType(element){
+    return 0;
+}
+
+// TODO: listofallmembersType
+function listofallmembersType(element){
+    return 0;
+}
+
+// TODO: locationType
+function locationType(element){
+    return 0;
+}
+
+// TODO: graphType
+function graphType(element){
+    return 0;
+}
+
+// TODO: incType
+function incType(element){
+    return 0;
+}
+
+// TODO: compoundRefType
+function compoundRefType(element){
+    return 0;
+}
+
+// TODO: reimplementType
+function reimplementType(element){
+    return 0;
+}
+
+// TODO: paramType
+function paramType(element){
+    return 0;
+}
+
+// TODO: enumvalueType
+function enumvalueType(element){
+    return 0;
+}
+
+// TODO: linkedTextType
+function linkedTextType(element){
+    return 0;
+}
+
+// TODO: templateparamlistType
+function templateparamlistType(element){
+    return 0;
+}
+
+// TODO: listingType
+function listingType(element){
+    return 0;
+}
+
+function refType(element){
+
+    return {
+        slug: element.attrs.refid,
+        prot: element.attrs.prot,
+        name: element.text()
+    };
+
+}
+
+function descriptionType(element){
+
+    var description = {};
+
+    // Title (0:1)
+    if (element.$('title').children.length){
+        description.title = element.$('title').text();
+    }
+
+    // Para (0:N)
+    if (element.$('para').length){
+        description.paragraphs = [];
+        if (element.$('para').children.length){
+            element.$('para').children.forEach(function(paragraph){
+                description.paragraphs.push(docParaType(paragraph));
+            })
+        }
+    }
+
+    // Type 1 sections (0:N)
+    if (element.$('sect1').length){
+        description.sections = [];
+        element.$('sect1').forEach(function(section){
+            description.sections.push(docSect1Type(section));
+        })
+    }
+
+    // Internal (0:1)
+    if (element.$('internal').length){
+        description.internal = docInternalType(element.$('internal').children[0]);
+    }
+
+    return description;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// TODO: docCharType
+function docCharType(element){
+    return 0;
+}
+
+// TODO: docCaptionType
+function docCaptionType(element){
+    return 0;
+}
+
+// TODO: docSect2Type
+function docSect2Type(element){
+    return 0;
+}
+
+// TODO: docInternalS1Type
+function docInternalS1Type(element){
+    return 0;
+}
+
+// TODO: docInternalType
+function docInternalType(element){
+
+    var internal = {};
+
+    // Paragraphs (0:N)
+    if (element.$('para').children.length){
+        internal.paragraphs = [];
+        element.$('para').children.forEach(function(paragraph){
+            internal.paragraphs.push(docParaType(paragraph));
+        });
+    }
+
+    // Type 1 sections (0:N)
+    if (element.$('sect1').length){
+        internal.sections = [];
+        element.$('sect1').forEach(function(section){
+            internal.sections.push(docSect1Type(section));
+        })
+    }
+
+    return internal;
 
 }
 
@@ -424,11 +644,6 @@ function docEmptyType(element){
         name: element.name
     };
 
-}
-
-// TODO: docCharType
-function docCharType(element){
-    return 0;
 }
 
 function docHeadingType(element){
@@ -546,11 +761,6 @@ function docEntryType(element){
 
     return entry;
 
-}
-
-// TODO: docCaptionType
-function docCaptionType(element){
-    return 0;
 }
 
 function docTitleCmdGroup(element){
@@ -735,21 +945,6 @@ function docRefTextType(element){
 
 }
 
-// TODO: listingType
-function listingType(element){
-    return 0;
-}
-
-function refType(element){
-
-    return {
-        slug: element.attrs.refid,
-        prot: element.attrs.prot,
-        name: element.text()
-    };
-
-}
-
 function docParaType(element){
 
     var paragraph = [];
@@ -804,77 +999,6 @@ function docSect1Type(element){
     }
 
     return sect1;
-
-}
-
-// TODO: docSect2Type
-function docSect2Type(element){
-    return 0;
-}
-
-// TODO: docInternalS1Type
-function docInternalS1Type(element){
-    return 0;
-}
-
-// TODO: docInternalType
-function docInternalType(element){
-
-    var internal = {};
-
-    // Paragraphs (0:N)
-    if (element.$('para').children.length){
-        internal.paragraphs = [];
-        element.$('para').children.forEach(function(paragraph){
-            internal.paragraphs.push(docParaType(paragraph));
-        });
-    }
-
-    // Type 1 sections (0:N)
-    if (element.$('sect1').length){
-        internal.sections = [];
-        element.$('sect1').forEach(function(section){
-            internal.sections.push(docSect1Type(section));
-        })
-    }
-
-    return internal;
-
-}
-
-function descriptionType(element){
-
-    var description = {};
-
-    // Title (0:1)
-    if (element.$('title').children.length){
-        description.title = element.$('title').text();
-    }
-
-    // Para (0:N)
-    if (element.$('para').length){
-        description.paragraphs = [];
-        if (element.$('para').children.length){
-            element.$('para').children.forEach(function(paragraph){
-                description.paragraphs.push(docParaType(paragraph));
-            })
-        }
-    }
-
-    // Type 1 sections (0:N)
-    if (element.$('sect1').length){
-        description.sections = [];
-        element.$('sect1').forEach(function(section){
-            description.sections.push(docSect1Type(section));
-        })
-    }
-
-    // Internal (0:1)
-    if (element.$('internal').length){
-        description.internal = docInternalType(element.$('internal').children[0]);
-    }
-
-    return description;
 
 }
 
