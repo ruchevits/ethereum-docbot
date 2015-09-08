@@ -716,7 +716,7 @@ function docRefTextType(element){
     var ref = {
         name: element.name,
         slug: element.attrs.refid,
-        kind: element.attrs.kindref,
+        type: element.attrs.kindref,
         external: element.attrs.external,
         body: []
     };
