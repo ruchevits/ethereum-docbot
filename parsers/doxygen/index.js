@@ -27,13 +27,13 @@ function parse(dirname) {
                     cwd: dirname
                 });
 
-                /*doxygen.stdout.on('data', function (data) {
-                 console.log('stdout: ' + data);
-                 });*/
+                doxygen.stdout.on('data', function (data) {
+                 //console.log('stdout: ' + data);
+                 });
 
-                /*doxygen.stderr.on('data', function (data) {
-                 reject(data)
-                 });*/
+                doxygen.stderr.on('data', function (data) {
+                 //reject(data)
+                 });
 
                 doxygen.on('exit', function (code) {
                     if (code !== 0) {
@@ -422,8 +422,8 @@ function memberdefType(memberdef){
         member.body.referencedby = referenceType(memberdef.$('referencedby'));
     }
 
-    console.log(memberdef)
-    console.log("================================================================================")
+    //console.log(memberdef)
+    //console.log("================================================================================")
 
     return member;
 
@@ -431,28 +431,14 @@ function memberdefType(memberdef){
 
 
 
-// TODO: referenceType
-function referenceType(element){
-    return 0;
-}
 
 // TODO: listofallmembersType
 function listofallmembersType(element){
     return 0;
 }
 
-// TODO: locationType
-function locationType(element){
-    return 0;
-}
-
-// TODO: graphType
-function graphType(element){
-    return 0;
-}
-
-// TODO: incType
-function incType(element){
+// TODO: memberRefType
+function memberRefType(element){
     return 0;
 }
 
@@ -466,8 +452,8 @@ function reimplementType(element){
     return 0;
 }
 
-// TODO: paramType
-function paramType(element){
+// TODO: incType
+function incType(element){
     return 0;
 }
 
@@ -476,19 +462,90 @@ function enumvalueType(element){
     return 0;
 }
 
-// TODO: linkedTextType
-function linkedTextType(element){
+// TODO: templateparamlistType
+function templateparamlistType(element){
     return 0;
 }
 
-// TODO: templateparamlistType
-function templateparamlistType(element){
+// TODO: paramType
+function paramType(element){
+    return 0;
+}
+
+// TODO: graphType
+function graphType(element){
+    return 0;
+}
+
+// TODO: nodeType
+function nodeType(element){
+    return 0;
+}
+
+// TODO: childnodeType
+function childnodeType(element){
+    return 0;
+}
+
+// TODO: codelineType
+function codelineType(element){
+    return 0;
+}
+
+// TODO: highlightType
+function highlightType(element){
+    return 0;
+}
+
+// TODO: referenceType
+function referenceType(element){
+    return 0;
+}
+
+// TODO: locationType
+function locationType(element){
     return 0;
 }
 
 // TODO: listingType
 function listingType(element){
     return 0;
+}
+
+// TODO: linkType
+function linkType(element){
+    return 0;
+}
+
+/*function refTextType(element){
+
+    return {
+        name: element.name,
+        refid: element.attrs.refid,
+        kindref: element.attrs.kindref,
+        external: element.attrs.external,
+        tooltip: element.attrs.tooltip,
+    };
+
+}*/
+
+function linkedTextType(element){
+
+    var linkedText = {
+        name: element.name
+    };
+
+    // Refs (0:N)
+    if (element.children.length){
+        linkedText.refs = [];
+        element.children.forEach(function(ref){
+            //linkedText.refs.push(refTextType(ref));
+            linkedText.refs.push(ref);
+        });
+    }
+
+    return linkedText;
+
 }
 
 function refType(element){
@@ -550,48 +607,133 @@ function descriptionType(element){
 
 
 
-// TODO: docCharType
+
+
+
+
+
+// TODO: docTitleType
+function docTitleType(element){
+    return 0;
+}
+
+// TODO: docAnchorType
+function docAnchorType(element){
+    return 0;
+}
+
+// TODO: docFormulaType
+function docFormulaType(element){
+    return 0;
+}
+
+// TODO: docIndexEntryType
+function docIndexEntryType(element){
+    return 0;
+}
+
+// TODO: docSimpleSectType
+function docSimpleSectType(element){
+    return 0;
+}
+
+// TODO: docVarListEntryType
+function docVarListEntryType(element){
+    return 0;
+}
+
+// TODO: docVariableListGroup
+function docVariableListGroup(element){
+    return 0;
+}
+
+// TODO: docVariableListType
+function docVariableListType(element){
+    return 0;
+}
+
+// TODO: docImageType
+function docImageType(element){
+    return 0;
+}
+
+// TODO: docDotFileType
+function docDotFileType(element){
+    return 0;
+}
+
+// TODO: docTocItemType
+function docTocItemType(element){
+    return 0;
+}
+
+// TODO: docTocListType
+function docTocListType(element){
+    return 0;
+}
+
+// TODO: docLanguageType
+function docLanguageType(element){
+    return 0;
+}
+
+// TODO: docParamListType
+function docParamListType(element){
+    return 0;
+}
+
+// TODO: docParamListItem
+function docParamListItem(element){
+    return 0;
+}
+
+// TODO: docParamNameList
+function docParamNameList(element){
+    return 0;
+}
+
+// TODO: docParamName
+function docParamName(element){
+    return 0;
+}
+
+// TODO: docXRefSectType
+function docXRefSectType(element){
+    return 0;
+}
+
+// TODO: docCopyType
+function docCopyType(element){
+    return 0;
+}
+
 function docCharType(element){
-    return 0;
+
+    return {
+        name: element.name,
+        char: element.attrs.char
+    };
+
 }
 
-// TODO: docCaptionType
 function docCaptionType(element){
-    return 0;
-}
 
-// TODO: docSect2Type
-function docSect2Type(element){
-    return 0;
-}
+    var caption = {
+        name: element.name,
+        body: []
+    };
 
-// TODO: docInternalS1Type
-function docInternalS1Type(element){
-    return 0;
-}
+    element.children.forEach(function(child){
 
-// TODO: docInternalType
-function docInternalType(element){
+        if (!child.name) {
+            caption.body.push(child);
+        } else {
+            caption.body.push(docTitleCmdGroup(child));
+        }
 
-    var internal = {};
+    });
 
-    // Paragraphs (0:N)
-    if (element.$('para').children.length){
-        internal.paragraphs = [];
-        element.$('para').children.forEach(function(paragraph){
-            internal.paragraphs.push(docParaType(paragraph));
-        });
-    }
-
-    // Type 1 sections (0:N)
-    if (element.$('sect1').length){
-        internal.sections = [];
-        element.$('sect1').forEach(function(section){
-            internal.sections.push(docSect1Type(section));
-        })
-    }
-
-    return internal;
+    return caption;
 
 }
 
@@ -675,13 +817,16 @@ function docListType(element){
         items: []
     };
 
-    element.children.forEach(function(child){
-
-        if (child.name == 'listitem') {
-            list.items.push(docListItemType(child));
-        }
-
+    // List items (1:N)
+    element.$('listitem').children.forEach(function(child){
+        list.items.push(docListItemType(child));
     });
+
+    /*element.children.forEach(function(child){
+     if (child.name == 'listitem') {
+     list.items.push(docListItemType(child));
+     }
+     });*/
 
     return list;
 
@@ -691,8 +836,13 @@ function docListItemType(element){
 
     var listitem = {
         name: element.name,
-        paragraphs: docParaType(element.children[0])
+        paragraphs: []
     };
+
+    // Paragraphs (1:N)
+    element.$('para').children.forEach(function(paragraph){
+        listitem.paragraphs.push(docParaType(paragraph));
+    });
 
     return listitem;
 
@@ -763,164 +913,6 @@ function docEntryType(element){
 
 }
 
-function docTitleCmdGroup(element){
-
-    switch (element.name) {
-
-        case 'ulink':
-            return docURLLink(element);
-
-        case 'bold':
-        case 'emphasis':
-        case 'computeroutput':
-        case 'subscript':
-        case 'superscript':
-        case 'center':
-        case 'small':
-            return docMarkupType(element);
-
-        // TODO: htmlonly
-        // xsd:string
-        //case 'htmlonly':
-        //    console.log(element)
-        //    return 0;
-
-        // TODO: latexonly
-        // xsd:string
-        //case 'latexonly':
-        //    console.log(element)
-        //    return 0;
-
-        // TODO: dot
-        // xsd:string
-        //case 'dot':
-        //    console.log(element)
-        //    return 0;
-
-        // TODO: anchor
-        // docAnchorType
-        //case 'anchor':
-        //    console.log(element)
-        //    return 0;
-
-        // TODO: formula
-        // docFormulaType
-        //case 'formula':
-        //    console.log(element)
-        //    return 0;
-
-        case 'ref':
-            return docRefTextType(element);
-
-        case 'copy':
-        case 'trademark':
-        case 'registered':
-        case 'lsquo':
-        case 'rsquo':
-        case 'ldquo':
-        case 'rdquo':
-        case 'ndash':
-        case 'mdash':
-        case 'nonbreakablespace':
-            return docEmptyType(element);
-
-        case 'umlaut':
-        case 'acute':
-        case 'grave':
-        case 'circ':
-        case 'slash':
-        case 'tilde':
-        case 'cedil':
-        case 'ring':
-        case 'szlig':
-            return docCharType(element);
-
-        default:
-            logger.error('Not implemented: ' + element.name);
-
-    }
-
-}
-
-function docCmdGroup(element){
-
-    switch (element.name){
-
-        case 'linebreak':
-        case 'hruler':
-            return docEmptyType(element);
-
-        case 'preformatted':
-            return docMarkupType(element);
-
-        case 'programlisting':
-            return listingType(element);
-
-        // xsd:string
-        //case 'verbatim':
-        //    return 0;
-
-        // docIndexEntryType
-        //case 'indexentry':
-        //    return 0;
-
-        case 'orderedlist':
-        case 'itemizedlist':
-            return docListType(element);
-
-        // docSimpleSectType
-        //case 'simplesect':
-        //    return 0;
-
-        // docTitleType
-        //case 'title':
-        //    return 0;
-
-        // docVariableListType
-        //case 'variablelist':
-        //    return 0;
-
-        case 'table':
-            return docTableType(element);
-
-        case 'heading':
-            return docHeadingType(element);
-
-        // docImageType
-        //case 'image':
-        //    return 0;
-
-        // docDotFileType
-        //case 'dotfile':
-        //    return 0;
-
-        // docTocListType
-        //case 'toclist':
-        //    return 0;
-
-        // docLanguageType
-        //case 'language':
-        //    return 0;
-
-        // docParamListType
-        //case 'parameterlist':
-        //    return 0;
-
-        // docXRefSectType
-        //case 'xrefsect':
-        //    return 0;
-
-        // docCopyType
-        //case 'copydoc':
-        //    return 0;
-
-        default:
-            return docTitleCmdGroup(element);
-
-    }
-
-}
-
 function docRefTextType(element){
 
     var ref = {
@@ -965,6 +957,133 @@ function docParaType(element){
 
 }
 
+function docTitleCmdGroup(element){
+
+    switch (element.name) {
+
+        case 'ulink':
+            return docURLLink(element);
+
+        case 'bold':
+        case 'emphasis':
+        case 'computeroutput':
+        case 'subscript':
+        case 'superscript':
+        case 'center':
+        case 'small':
+            return docMarkupType(element);
+
+        case 'htmlonly':
+        case 'latexonly':
+        case 'dot':
+            return element;
+
+        case 'anchor':
+            return docAnchorType(element);
+
+        case 'formula':
+            return docFormulaType(element);
+
+        case 'ref':
+            return docRefTextType(element);
+
+        case 'copy':
+        case 'trademark':
+        case 'registered':
+        case 'lsquo':
+        case 'rsquo':
+        case 'ldquo':
+        case 'rdquo':
+        case 'ndash':
+        case 'mdash':
+        case 'nonbreakablespace':
+            return docEmptyType(element);
+
+        case 'umlaut':
+        case 'acute':
+        case 'grave':
+        case 'circ':
+        case 'slash':
+        case 'tilde':
+        case 'cedil':
+        case 'ring':
+        case 'szlig':
+            return docCharType(element);
+
+        default:
+            logger.warning('Not implemented: ' + element.name);
+
+    }
+
+}
+
+function docCmdGroup(element){
+
+    switch (element.name){
+
+        case 'linebreak':
+        case 'hruler':
+            return docEmptyType(element);
+
+        case 'preformatted':
+            return docMarkupType(element);
+
+        case 'programlisting':
+            return listingType(element);
+
+        case 'verbatim':
+            return element;
+
+        case 'indexentry':
+            return docIndexEntryType(element);
+
+        case 'orderedlist':
+        case 'itemizedlist':
+            return docListType(element);
+
+        case 'simplesect':
+            return docSimpleSectType(element);
+
+        case 'title':
+            return docTitleType(element);
+
+        case 'variablelist':
+            return docVariableListType(element);
+
+        case 'table':
+            return docTableType(element);
+
+        case 'heading':
+            return docHeadingType(element);
+
+        case 'image':
+            return docImageType(element);
+
+        case 'dotfile':
+            return docDotFileType(element);
+
+        case 'toclist':
+            return docTocListType(element);
+
+        case 'language':
+            return docLanguageType(element);
+
+        case 'parameterlist':
+            return docParamListType(element);
+
+        case 'xrefsect':
+            return docXRefSectType(element);
+
+        case 'copydoc':
+            return docCopyType(element);
+
+        default:
+            return docTitleCmdGroup(element);
+
+    }
+
+}
+
 function docSect1Type(element){
 
     var sect1 = {
@@ -999,6 +1118,221 @@ function docSect1Type(element){
     }
 
     return sect1;
+
+}
+
+function docSect2Type(element){
+
+    var sect2 = {
+        id: element.attrs.id,
+        body: {}
+    };
+
+    // Title (1)
+    if (element.$('title').children.length){
+        sect2.title = element.$('title').text();
+    }
+
+    // Paragraphs (0:N)
+    if (element.$('para').children.length){
+        sect2.paragraphs = [];
+        element.$('para').children.forEach(function(paragraph){
+            sect2.paragraphs.push(docParaType(paragraph));
+        });
+    }
+
+    // Type 3 sections (0:N)
+    if (element.$('sect3').children.length){
+        sect2.sections = [];
+        element.$('sect3').children.forEach(function(section){
+            sect2.sections.push(docSect3Type(section));
+        });
+    }
+
+    // Internal (0:1)
+    if (element.$('internal').children.length){
+        sect2.internal = docInternalS2Type(element.$('internal').children[0]);
+    }
+
+    return sect2;
+
+}
+
+function docSect3Type(element){
+
+    var sect3 = {
+        id: element.attrs.id,
+        body: {}
+    };
+
+    // Title (1)
+    if (element.$('title').children.length){
+        sect3.title = element.$('title').text();
+    }
+
+    // Paragraphs (0:N)
+    if (element.$('para').children.length){
+        sect3.paragraphs = [];
+        element.$('para').children.forEach(function(paragraph){
+            sect3.paragraphs.push(docParaType(paragraph));
+        });
+    }
+
+    // Type 4 sections (0:N)
+    if (element.$('sect4').children.length){
+        sect3.sections = [];
+        element.$('sect4').children.forEach(function(section){
+            sect3.sections.push(docSect4Type(section));
+        });
+    }
+
+    // Internal (0:1)
+    if (element.$('internal').children.length){
+        sect3.internal = docInternalS3Type(element.$('internal').children[0]);
+    }
+
+    return sect3;
+
+}
+
+function docSect4Type(element){
+
+    var sect4 = {
+        id: element.attrs.id,
+        body: {}
+    };
+
+    // Title (1)
+    if (element.$('title').children.length){
+        sect4.title = element.$('title').text();
+    }
+
+    // Paragraphs (0:N)
+    if (element.$('para').children.length){
+        sect4.paragraphs = [];
+        element.$('para').children.forEach(function(paragraph){
+            sect4.paragraphs.push(docParaType(paragraph));
+        });
+    }
+
+    // Internal (0:1)
+    if (element.$('internal').children.length){
+        sect4.internal = docInternalS4Type(element.$('internal').children[0]);
+    }
+
+    return sect4;
+
+}
+
+function docInternalType(element){
+
+    var internal = {};
+
+    // Paragraphs (0:N)
+    if (element.$('para').children.length){
+        internal.paragraphs = [];
+        element.$('para').children.forEach(function(paragraph){
+            internal.paragraphs.push(docParaType(paragraph));
+        });
+    }
+
+    // Type 1 sections (0:N)
+    if (element.$('sect1').length){
+        internal.sections = [];
+        element.$('sect1').forEach(function(section){
+            internal.sections.push(docSect1Type(section));
+        })
+    }
+
+    return internal;
+
+}
+
+function docInternalS1Type(element){
+
+    var internalS1 = {};
+
+    // Paragraphs (0:N)
+    if (element.$('para').children.length){
+        internalS1.paragraphs = [];
+        element.$('para').children.forEach(function(paragraph){
+            internalS1.paragraphs.push(docParaType(paragraph));
+        });
+    }
+
+    // Type 2 sections (0:N)
+    if (element.$('sect2').length){
+        internalS1.sections = [];
+        element.$('sect2').forEach(function(section){
+            internalS1.sections.push(docSect2Type(section));
+        })
+    }
+
+    return internalS1;
+
+}
+
+function docInternalS2Type(element){
+
+    var internalS2 = {};
+
+    // Paragraphs (0:N)
+    if (element.$('para').children.length){
+        internalS2.paragraphs = [];
+        element.$('para').children.forEach(function(paragraph){
+            internalS2.paragraphs.push(docParaType(paragraph));
+        });
+    }
+
+    // Type 3 sections (0:N)
+    if (element.$('sect3').length){
+        internalS2.sections = [];
+        element.$('sect3').forEach(function(section){
+            internalS2.sections.push(docSect3Type(section));
+        })
+    }
+
+    return internalS2;
+
+}
+
+function docInternalS3Type(element){
+
+    var internalS3 = {};
+
+    // Paragraphs (0:N)
+    if (element.$('para').children.length){
+        internalS3.paragraphs = [];
+        element.$('para').children.forEach(function(paragraph){
+            internalS3.paragraphs.push(docParaType(paragraph));
+        });
+    }
+
+    // Type 4 sections (0:N)
+    if (element.$('sect3').length){
+        internalS3.sections = [];
+        element.$('sect3').forEach(function(section){
+            internalS3.sections.push(docSect4Type(section));
+        })
+    }
+
+    return internalS3;
+
+}
+
+function docInternalS4Type(element){
+
+    var internalS4 = {};
+
+    // Paragraphs (0:N)
+    if (element.$('para').children.length){
+        internalS4.paragraphs = [];
+        element.$('para').children.forEach(function(paragraph){
+            internalS4.paragraphs.push(docParaType(paragraph));
+        });
+    }
+
+    return internalS4;
 
 }
 
