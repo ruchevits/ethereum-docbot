@@ -75,6 +75,7 @@ function createProject(project, version){
 
             DocProject.create({
                 _version: version.slug,
+                type: project.type,
                 slug: project.slug,
                 repository: project.repository,
                 summary: project.summary,

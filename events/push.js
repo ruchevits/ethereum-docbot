@@ -26,6 +26,7 @@ var database = require('../database');
 function pushEvent(payload){
 
     var project = {
+        type: payload.type,
         slug: payload.slug,
         destination: payload.destination,
         repository: payload.repository

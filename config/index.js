@@ -24,4 +24,10 @@ try {
     config.projects = {};
 }
 
+try {
+    config.wikis = require('./wikis.json');
+} catch (e) {
+    config.wikis = {};
+}
+
 module.exports = config;

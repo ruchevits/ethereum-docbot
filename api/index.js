@@ -1,7 +1,6 @@
 'use strict';
 
 var fs = require('fs-extra');
-var path = require('path');
 var express = require('express');
 var crypto = require('crypto');
 
@@ -15,14 +14,22 @@ router.post('/', function(req, res) {
 
     var body = res.socket.parser.incoming.body;
 
+    var type, secret;
+
     // Check if the repository name is valid
-    if (!config.projects[body.repository.name]) {
+    if (config.projects[body.repository.name]) {
+        type = 'project';
+        secret = config.projects[body.repository.name];
+    } else if (config.wikis[body.repository.name]) {
+        type = 'wiki';
+        secret = config.wikis[body.repository.name];
+    } else {
         logger.error('Not currently watching for changes in ' + body.repository.name + ' repository');
         return res.end();
     }
 
     // Validate request
-    var hmac = crypto.createHmac("sha1", config.projects[body.repository.name]);
+    var hmac = crypto.createHmac("sha1", secret);
     hmac.update(JSON.stringify(body));
     var signature = 'sha1=' + hmac.digest("hex");
 
@@ -52,6 +59,7 @@ router.post('/', function(req, res) {
     }
 
     var payload = {
+        type: type,
         slug: body.repository.name,
         destination: destination,
         repository: body.repository

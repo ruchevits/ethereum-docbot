@@ -22,6 +22,43 @@ function run(dirname, parser) {
                 case 'jsdoc':
                     return jsdoc.parse(dirname + '/repo');
 
+                    /*var compounds = [];
+                     console.log(compounds.length)
+
+                     Q.fcall(function(){
+
+                        return jsdoc.parse(dirname + '/repo');
+
+                    }).then(function (jsdocCompounds) {
+
+                        jsdocCompounds.forEach(function(compound){
+                            compounds.push(compound);
+                        });
+
+                        console.log(jsdocCompounds.length)
+                        console.log(compounds.length)
+
+                        return markdown.parse(dirname + '/repo');
+
+                    }).then(function (markdownCompounds) {
+
+                        markdownCompounds.forEach(function(compound){
+                            compounds.push(compound);
+                        });
+
+                        console.log(markdownCompounds.length)
+                        console.log(compounds.length)
+
+                        compounds.concat(markdownCompounds)
+
+                    }).catch(function () {
+
+                    }).done(function(){
+
+                        return compounds;
+
+                    });*/
+
                 case 'markdown':
                     return markdown.parse(dirname + '/repo');
 

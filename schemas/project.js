@@ -41,6 +41,7 @@ var ProjectSummary;
  */
 var DocProject = new mongoose.Schema({
     _version: String,
+    type: String,
     slug: String,
     repository: {
         clone_url: String
