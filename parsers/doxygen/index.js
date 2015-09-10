@@ -1,8 +1,7 @@
 var Q = require('q');
 var fs = require('fs-extra');
-var glob = require("glob");
-var path = require('path');
 var xamel = require('xamel');
+var marked = require('marked');
 var spawn = require('child_process').spawn;
 
 var config = require('../../config');
@@ -28,11 +27,12 @@ function parse(dirname) {
                 });
 
                 doxygen.stdout.on('data', function (data) {
-                 //console.log('stdout: ' + data);
+                    // Child process hangs without this
+                    //console.log('stdout: ' + data);
                  });
 
                 doxygen.stderr.on('data', function (data) {
-                 //reject(data)
+                    //reject(data)
                  });
 
                 doxygen.on('exit', function (code) {
@@ -63,11 +63,10 @@ function parse(dirname) {
                 });
 
                 /*xsltproc.stderr.on('data', function (data) {
-                 reject(data);
-                 });*/
+                    reject(data);
+                });*/
 
                 xsltproc.on('exit', function (code) {
-                    //console.log(data)
                     resolve(data);
                 });
 
@@ -84,8 +83,6 @@ function parse(dirname) {
                     if (err !== null) {
                         throw err;
                     }
-
-                    //console.dir(JSON.stringify(parsedXml));
 
                     resolve(parsedXml.children);
 
@@ -531,20 +528,23 @@ function linkType(element){
 
 function linkedTextType(element){
 
-    var linkedText = {
+    var linkedTextRefs = [];
+
+    /*var linkedText = {
         name: element.name
-    };
+    };*/
 
     // Refs (0:N)
     if (element.children.length){
-        linkedText.refs = [];
+        //linkedText.refs = [];
         element.children.forEach(function(ref){
             //linkedText.refs.push(refTextType(ref));
-            linkedText.refs.push(ref);
+            //linkedText.refs.push(ref);
+            linkedTextRefs.push(ref)
         });
     }
 
-    return linkedText;
+    return linkedTextRefs;
 
 }
 
@@ -710,7 +710,7 @@ function docCopyType(element){
 function docCharType(element){
 
     return {
-        name: element.name,
+        type: element.name,
         char: element.attrs.char
     };
 
@@ -719,7 +719,7 @@ function docCharType(element){
 function docCaptionType(element){
 
     var caption = {
-        name: element.name,
+        type: element.name,
         body: []
     };
 
@@ -740,7 +740,7 @@ function docCaptionType(element){
 function docURLLink(element){
 
     var link = {
-        name: element.name,
+        type: element.name,
         url: element.attrs.url,
         body: []
     };
@@ -762,7 +762,7 @@ function docURLLink(element){
 function docMarkupType(element){
 
     var markup = {
-        name: element.name,
+        type: element.name,
         body: []
     };
 
@@ -783,7 +783,7 @@ function docMarkupType(element){
 function docEmptyType(element){
 
     return {
-        name: element.name
+        type: element.name
     };
 
 }
@@ -791,9 +791,9 @@ function docEmptyType(element){
 function docHeadingType(element){
 
     var heading = {
-        name: element.name,
-        level: element.attrs.level,
-        body: []
+        type: element.name,
+        depth: element.attrs.level,
+        text: []
     };
 
     element.children.forEach(function(child){
@@ -813,7 +813,7 @@ function docHeadingType(element){
 function docListType(element){
 
     var list = {
-        name: element.name,
+        type: element.name,
         items: []
     };
 
@@ -835,7 +835,7 @@ function docListType(element){
 function docListItemType(element){
 
     var listitem = {
-        name: element.name,
+        type: element.name,
         paragraphs: []
     };
 
@@ -851,7 +851,7 @@ function docListItemType(element){
 function docTableType(element){
 
     var table = {
-        name: element.name,
+        type: element.name,
         size: {
             rows: element.attrs.rows,
             cols: element.attrs.cols
@@ -879,7 +879,7 @@ function docTableType(element){
 function docRowType(element){
 
     var row = {
-        name: element.name,
+        type: element.name,
         entries: []
     };
 
@@ -897,7 +897,7 @@ function docRowType(element){
 function docEntryType(element){
 
     var entry = {
-        name: element.name,
+        type: element.name,
         thead: element.attrs.thead,
         paragraphs: []
     };
@@ -915,10 +915,22 @@ function docEntryType(element){
 
 function docRefTextType(element){
 
+    return {
+        type: 'link',
+        text: '<a href="'+element.attrs.refid+'">REF_TEXT</a>'
+    };
+
+    /*return {
+        type: 'text',
+        text: '<a href="'+element.attrs.refid+'">REF_TEXT</a>'
+    };*/
+
+    /*console.log(element)
+
     var ref = {
-        name: element.name,
-        slug: element.attrs.refid,
-        type: element.attrs.kindref,
+        type: element.name,
+        refid: element.attrs.refid,
+        kindref: element.attrs.kindref,
         external: element.attrs.external,
         body: []
     };
@@ -933,27 +945,41 @@ function docRefTextType(element){
 
     });
 
-    return ref;
+    return ref;*/
 
 }
 
 function docParaType(element){
 
+    //console.log(element.children);
+    //console.log('\n================================================================================\n');
+
     var paragraph = [];
 
     element.children.forEach(function(child){
+        //console.log(child)
+        //console.log('\n================================================================================\n');
 
         if (!child.name) {
-            paragraph.push(child);
-        } else if (child.name == 'para') {
-            paragraph.push(docParaType(child));
-        } else {
-            paragraph.push(docCmdGroup(child));
+            paragraph.push({
+                type: 'text',
+                text: child
+            });
+        } /*else if (child.name == 'para') {
+            paragraph.push(
+                docParaType(child)
+            );
+        }*/ else {
+            paragraph.push(
+                docCmdGroup(child)
+            );
         }
 
     });
 
-    return paragraph;
+    paragraph.links = {};
+
+    return marked.parser(paragraph);
 
 }
 

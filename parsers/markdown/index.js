@@ -24,6 +24,10 @@ function parse(dirname) {
 
             var data = fs.readFileSync(filepath, 'utf8');
 
+            var tokens = marked.lexer(data);
+            console.log(tokens);
+            console.log('\n================================================================================\n');
+
             compounds.push({
                 slug: filename,
                 parser: 'markdown',

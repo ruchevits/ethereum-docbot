@@ -4,8 +4,6 @@ var fs = require('fs-extra');
 var jsdocParse = require("jsdoc-parse");
 var marked = require('marked');
 
-var helpers = require('../../helpers');
-
 function parse(dirname) {
 
     console.log("Parsing with JsDoc files: " + dirname);
@@ -14,6 +12,7 @@ function parse(dirname) {
 
         var compounds = [];
 
+        // Markdown files
         var mdFilepaths = glob.sync("*.md", {
             cwd: dirname,
             realpath: true
@@ -37,9 +36,8 @@ function parse(dirname) {
 
         });
 
-        ////////////////////////////////////////////////////////////
-
-        var filepaths = glob.sync("*.js", {
+        // javascript files
+        var jsFilepaths = glob.sync("*.js", {
             cwd: dirname,
             realpath: true
         });
@@ -47,7 +45,7 @@ function parse(dirname) {
         var data = '';
 
         jsdocParse({
-            src: filepaths
+            src: jsFilepaths
         }).on('data', function(chunk) {
             data += chunk;
         }).on('end', function() {
