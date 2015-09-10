@@ -119,6 +119,10 @@ function createCompounds(compounds, project){
                     _project: project.slug,
                     slug: compound.slug,
                     parser: compound.parser,
+                    summary: {
+                        kind: compound.body.kind,
+                        name: compound.body.name
+                    },
                     body: compound.body
                 }, function(err){
 

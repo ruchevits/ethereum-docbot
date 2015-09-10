@@ -59,6 +59,7 @@ var DocCompound = new mongoose.Schema({
     language: String,
     slug: String,
     kind: String,
+    summary: mongoose.Schema.Types.Mixed,
     body: mongoose.Schema.Types.Mixed
 }, {
     collection: 'DocCompounds'
