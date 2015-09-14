@@ -10,6 +10,7 @@ var config = {
     temp: '.tmp',
     mongo: {
         uri: process.env.mongoUrl,
+      
         options: {
             db: {
                 safe: true
