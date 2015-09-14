@@ -5,7 +5,7 @@ var path = require('path');
 // TODO: read from environment variables
 var config = {
     env: 'development',
-    port: 3001,
+    port: 3000,
     root: path.normalize(__dirname + '../..'),
     temp: '.tmp',
     mongo: {
@@ -26,6 +26,7 @@ try {
 }
 
 try {
+  console.log("loading wikis:", process.env.wikis);
   config.wikis = process.env.wikis;
 } catch (e) {
     config.wikis = {};
