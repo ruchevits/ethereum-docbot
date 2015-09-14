@@ -20,7 +20,8 @@ var config = {
 };
 
 try {
-    config.projects = require('./projects.json');
+  console.log("loading projects:", process.env.projects);
+  config.projects = process.env.projects;
 } catch (e) {
     config.projects = {};
 }
