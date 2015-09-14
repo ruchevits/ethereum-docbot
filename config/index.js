@@ -26,7 +26,7 @@ try {
 }
 
 try {
-    config.wikis = require('./wikis.json');
+  config.wikis = process.env.wikis;
 } catch (e) {
     config.wikis = {};
 }
