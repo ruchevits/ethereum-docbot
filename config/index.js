@@ -9,7 +9,7 @@ var config = {
     root: path.normalize(__dirname + '../..'),
     temp: '.tmp',
     mongo: {
-        uri: 'mongodb://localhost:27018/ethdev',
+        uri: 'mongodb://localhost:27017/ethdev',
         options: {
             db: {
                 safe: true

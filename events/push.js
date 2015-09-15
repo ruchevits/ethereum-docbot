@@ -26,7 +26,6 @@ var database = require('../database');
 function pushEvent(payload){
 
     var project = {
-        type: payload.type,
         slug: payload.slug,
         destination: payload.destination,
         repository: payload.repository
@@ -95,7 +94,20 @@ function pushEvent(payload){
 
         logger.info("Parsed project sources using " + temp.parser + " parser");
 
-        return database.createProjectAndCompounds(project, compounds);
+        switch (temp.parser){
+
+            case 'jsdoc':
+            case 'doxygen':
+                // TODO: reference version
+                var version = {
+                    slug: 'develop'
+                };
+                return database.createReference(version, project, compounds);
+
+            case 'markdown':
+                return database.createWiki(project, compounds);
+
+        }
 
     }).then(function(){
 

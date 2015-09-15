@@ -119,6 +119,7 @@ function compounddefType(compounddef){
     var compound = {
         slug: compounddef.attrs.id,
         parser: 'doxygen',
+        summary: {},
         body: {}
     };
 

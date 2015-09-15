@@ -14,14 +14,12 @@ router.post('/', function(req, res) {
 
     var body = res.socket.parser.incoming.body;
 
-    var type, secret;
+    var secret;
 
     // Check if the repository name is valid
     if (config.projects[body.repository.name]) {
-        type = 'project';
         secret = config.projects[body.repository.name];
     } else if (config.wikis[body.repository.name]) {
-        type = 'wiki';
         secret = config.wikis[body.repository.name];
     } else {
         logger.error('Not currently watching for changes in ' + body.repository.name + ' repository');
@@ -59,11 +57,12 @@ router.post('/', function(req, res) {
     }
 
     var payload = {
-        type: type,
         slug: body.repository.name,
         destination: destination,
         repository: body.repository
     };
+
+    // TODO: implement queue
 
     // Check which GitHub event happened
     switch (req.headers['x-github-event']) {
@@ -88,11 +87,17 @@ router.post('/', function(req, res) {
 
 router.get('/', function(req, res) {
 
-    var DocCompound = require('../schemas/compound.js');
+    /*var DocCompound = require('../schemas/compound.js');
     var DocProject = require('../schemas/project.js');
     var DocVersion = require('../schemas/version.js');
     var DocWiki = require('../schemas/wiki.js');
-    var DocWikiPage = require('../schemas/wikiPage.js');
+    var DocWikiPage = require('../schemas/wikiPage.js');*/
+
+    var DocsReferenceVersion = require('../schemas/reference/version');
+    var DocsReferenceProject = require('../schemas/reference/project');
+    var DocsReferenceCompound = require('../schemas/reference/compound');
+    var DocsWikiBook = require('../schemas/wiki/book');
+    var DocsWikiPage = require('../schemas/wiki/page');
 
     var response = {
         versions: null,
@@ -100,19 +105,29 @@ router.get('/', function(req, res) {
         compounds: null
     };
 
-    DocVersion.find({}, function(err, versions){
+    DocsReferenceVersion.find({}, function(err, versions){
         if(err) return res.status(500).send(err);
         response.versions = versions;
 
-        DocProject.find({}, function(err, projects){
+        DocsReferenceProject.find({}, function(err, projects){
             if(err) return res.status(500).send(err);
             response.projects = projects;
 
-            DocCompound.find({}, function(err, compounds){
+            DocsReferenceCompound.find({}, function(err, compounds){
                 if(err) return res.status(500).send(err);
                 response.compounds = compounds;
 
-                return res.status(200).json(response);
+                DocsWikiBook.find({}, function(err, books){
+                    if(err) return res.status(500).send(err);
+                    response.books = books;
+
+                    DocsWikiPage.find({}, function(err, pages){
+                        if(err) return res.status(500).send(err);
+                        response.pages = pages;
+
+                        return res.status(200).json(response);
+                    });
+                });
             });
         });
     });

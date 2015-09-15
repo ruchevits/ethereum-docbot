@@ -29,6 +29,8 @@ function parse(dirname) {
                 parser: 'markdown',
                 body: {
                     language: 'en',
+                    name: 'filename',
+                    kind: 'page',
                     content: marked(data)
                 }
             });
@@ -44,6 +46,7 @@ function parse(dirname) {
 
         var data = '';
 
+        // TODO: compound kind and name
         jsdocParse({
             src: jsFilepaths
         }).on('data', function(chunk) {
@@ -55,6 +58,7 @@ function parse(dirname) {
                 parsedData[i] = {
                     slug: body.name,
                     parser: 'jsdoc',
+                    summary: {},
                     body: body
                 }
             }

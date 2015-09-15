@@ -2,12 +2,24 @@ var Q = require('q');
 var fs = require('fs-extra');
 var glob = require("glob");
 var marked = require('marked');
+var _ = require('lodash');
 
 var helpers = require('../../helpers');
 
 function parse(dirname) {
 
     console.log("Parsing with Markdown files: " + dirname);
+
+    /*marked.setOptions({
+        renderer: new marked.Renderer(),
+        gfm: true,
+        tables: true,
+        breaks: true,
+        pedantic: false,
+        sanitize: true,
+        smartLists: true,
+        smartypants: true
+    });*/
 
     return Q.Promise(function(resolve, reject, notify) {
 
@@ -16,7 +28,7 @@ function parse(dirname) {
             realpath: true
         });
 
-        var compounds = [];
+        var pages = {};
 
         filepaths.forEach(function(filepath){
 
@@ -25,18 +37,38 @@ function parse(dirname) {
             var data = fs.readFileSync(filepath, 'utf8');
 
             var tokens = marked.lexer(data);
-            console.log(tokens);
-            console.log('\n================================================================================\n');
 
-            compounds.push({
-                slug: filename,
-                parser: 'markdown',
-                body: {
-                    language: 'en',
-                    content: marked(data)
-                }
-            });
+            var languageRegex = /\[(.*?)\]-/g;
+            var match = languageRegex.exec(filename);
+            var language = match[1].toLowerCase();
+            var slug = filename.substring(language.length + 3, filename.length - 3).toLowerCase();
+            var name = slug.split('-').join(' ');
 
+            if (!pages[slug]) {
+                pages[slug] = {
+                    slug: slug,
+                    parser: 'marked',
+                    summary: {},
+                    body: {}
+                };
+            }
+
+            pages[slug].summary[language] = {
+                name: name
+            };
+
+            pages[slug].body[language] = {
+                name: name,
+                content: marked(data)
+            };
+
+        });
+
+        var compounds = [];
+
+        _.each(pages, function(page, slug){
+
+            compounds.push(page);
 
         });
 
