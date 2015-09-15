@@ -54,11 +54,13 @@ function parse(dirname) {
             }
 
             pages[slug].summary[language] = {
-                name: name
+                name: name,
+                kind: 'page'
             };
 
             pages[slug].body[language] = {
                 name: name,
+                kind: 'page',
                 content: marked(data)
             };
 

@@ -263,6 +263,10 @@ function compounddefType(compounddef){
         compound.body.listofallmembers = listofallmembersType(compounddef.$('listofallmembers').children[0]);
     }
 
+    // Set summary
+    compound.summary.name = compound.body.name;
+    compound.summary.kind = compound.body.kind;
+
     return compound;
 
 }
