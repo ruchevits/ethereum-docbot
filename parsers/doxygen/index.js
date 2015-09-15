@@ -119,6 +119,7 @@ function compounddefType(compounddef){
     var compound = {
         slug: compounddef.attrs.id,
         parser: 'doxygen',
+        summary: {},
         body: {}
     };
 
@@ -261,6 +262,10 @@ function compounddefType(compounddef){
     if (compounddef.$('listofallmembers').children.length){
         compound.body.listofallmembers = listofallmembersType(compounddef.$('listofallmembers').children[0]);
     }
+
+    // Set summary
+    compound.summary.name = compound.body.name;
+    compound.summary.kind = compound.body.kind;
 
     return compound;
 
