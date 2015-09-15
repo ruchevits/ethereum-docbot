@@ -5,11 +5,11 @@ var path = require('path');
 // TODO: read from environment variables
 var config = {
     env: 'development',
-    port: 3001,
+    port: 3000,
     root: path.normalize(__dirname + '../..'),
     temp: '.tmp',
     mongo: {
-        uri: 'mongodb://localhost:27017/ethdev',
+        uri: process.env.mongoUrl,
         options: {
             db: {
                 safe: true
@@ -19,13 +19,15 @@ var config = {
 };
 
 try {
-    config.projects = require('./projects.json');
+  console.log("loading projects:", process.env.projects);
+  config.projects = process.env.projects;
 } catch (e) {
     config.projects = {};
 }
 
 try {
-    config.wikis = require('./wikis.json');
+  console.log("loading wikis:", process.env.wikis);
+  config.wikis = process.env.wikis;
 } catch (e) {
     config.wikis = {};
 }
