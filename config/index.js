@@ -2,6 +2,8 @@
 
 var path = require('path');
 
+var logger = require('../logger');
+
 var config = {
     env: 'development',
     port: process.env.port,
@@ -18,15 +20,15 @@ var config = {
 };
 
 try {
-  console.log("loading projects:", process.env.projects);
-  config.projects = process.env.projects;
+    logger.info('loading projects:', process.env.projects);
+    config.projects = process.env.projects;
 } catch (e) {
     config.projects = {};
 }
 
 try {
-  console.log("loading wikis:", process.env.wikis);
-  config.wikis = process.env.wikis;
+    logger.info('loading wikis:', process.env.wikis);
+    config.wikis = process.env.wikis;
 } catch (e) {
     config.wikis = {};
 }
