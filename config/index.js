@@ -2,10 +2,9 @@
 
 var path = require('path');
 
-// TODO: read from environment variables
 var config = {
     env: 'development',
-    port: 3000,
+    port: process.env.port,
     root: path.normalize(__dirname + '../..'),
     temp: '.tmp',
     mongo: {
