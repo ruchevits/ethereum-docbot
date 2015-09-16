@@ -42,7 +42,7 @@ function parse(dirname) {
 
         });
 
-        // javascript files
+        // Javascript files
         var jsFilepaths = glob.sync("*.js", {
             cwd: dirname,
             realpath: true
@@ -50,7 +50,6 @@ function parse(dirname) {
 
         var data = '';
 
-        // TODO: compound kind and name
         jsdocParse({
             src: jsFilepaths
         }).on('data', function(chunk) {

@@ -2,10 +2,11 @@
 
 var path = require('path');
 
-// TODO: read from environment variables
+var logger = require('../logger');
+
 var config = {
     env: 'development',
-    port: 3000,
+    port: process.env.port,
     root: path.normalize(__dirname + '../..'),
     temp: '.tmp',
     mongo: {
@@ -19,15 +20,13 @@ var config = {
 };
 
 try {
-  console.log("loading projects:", process.env.projects);
-  config.projects = process.env.projects;
+    config.projects = JSON.parse(process.env.projects);
 } catch (e) {
     config.projects = {};
 }
 
 try {
-  console.log("loading wikis:", process.env.wikis);
-  config.wikis = process.env.wikis;
+    config.wikis = JSON.parse(process.env.wikis);
 } catch (e) {
     config.wikis = {};
 }

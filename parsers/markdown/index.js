@@ -36,8 +36,6 @@ function parse(dirname) {
 
             var data = fs.readFileSync(filepath, 'utf8');
 
-            var tokens = marked.lexer(data);
-
             var languageRegex = /\[(.*?)\]-/g;
             var match = languageRegex.exec(filename);
             var language = match[1].toLowerCase();

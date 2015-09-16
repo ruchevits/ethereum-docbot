@@ -85,13 +85,7 @@ router.post('/', function(req, res) {
 
 });
 
-router.get('/', function(req, res) {
-
-    /*var DocCompound = require('../schemas/compound.js');
-    var DocProject = require('../schemas/project.js');
-    var DocVersion = require('../schemas/version.js');
-    var DocWiki = require('../schemas/wiki.js');
-    var DocWikiPage = require('../schemas/wikiPage.js');*/
+/*router.get('/', function(req, res) {
 
     var DocsReferenceVersion = require('../schemas/reference/version');
     var DocsReferenceProject = require('../schemas/reference/project');
@@ -132,6 +126,6 @@ router.get('/', function(req, res) {
         });
     });
 
-});
+});*/
 
 module.exports = router;
