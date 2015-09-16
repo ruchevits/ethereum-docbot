@@ -20,15 +20,13 @@ var config = {
 };
 
 try {
-    logger.info('loading projects:', process.env.projects);
-    config.projects = process.env.projects;
+    config.projects = JSON.parse(process.env.projects);
 } catch (e) {
     config.projects = {};
 }
 
 try {
-    logger.info('loading wikis:', process.env.wikis);
-    config.wikis = process.env.wikis;
+    config.wikis = JSON.parse(process.env.wikis);
 } catch (e) {
     config.wikis = {};
 }
