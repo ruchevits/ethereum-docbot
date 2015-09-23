@@ -14,20 +14,20 @@ router.post('/', function(req, res) {
 
     var body = res.socket.parser.incoming.body;
 
-    var secret;
+    var projectConfig;
 
     // Check if the repository name is valid
     if (config.projects[body.repository.name]) {
-        secret = config.projects[body.repository.name];
+        projectConfig = config.projects[body.repository.name];
     } else if (config.wikis[body.repository.name]) {
-        secret = config.wikis[body.repository.name];
+        projectConfig = config.wikis[body.repository.name];
     } else {
         logger.error('Not currently watching for changes in ' + body.repository.name + ' repository');
         return res.end();
     }
 
     // Validate request
-    var hmac = crypto.createHmac("sha1", secret);
+    var hmac = crypto.createHmac("sha1", projectConfig.secret);
     hmac.update(JSON.stringify(body));
     var signature = 'sha1=' + hmac.digest("hex");
 
@@ -59,7 +59,8 @@ router.post('/', function(req, res) {
     var payload = {
         slug: body.repository.name,
         destination: destination,
-        repository: body.repository
+        repository: body.repository,
+        config: projectConfig
     };
 
     // TODO: implement queue
@@ -85,7 +86,7 @@ router.post('/', function(req, res) {
 
 });
 
-/*router.get('/', function(req, res) {
+router.get('/', function(req, res) {
 
     var DocsReferenceVersion = require('../schemas/reference/version');
     var DocsReferenceProject = require('../schemas/reference/project');
@@ -126,6 +127,6 @@ router.post('/', function(req, res) {
         });
     });
 
-});*/
+});
 
 module.exports = router;
