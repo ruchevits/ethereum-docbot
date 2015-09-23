@@ -27,6 +27,7 @@ function pushEvent(payload){
 
     var project = {
         slug: payload.slug,
+        config: payload.config,
         destination: payload.destination,
         repository: payload.repository
     };
@@ -67,34 +68,23 @@ function pushEvent(payload){
 
         logger.info("Deleted " + deletedFilesNum + " Git specific files");
 
-        // Read project configuration
-        return helpers.filesystem.read.config(temp.paths.repo);
-
-    }).then(function(projectConfig){
-
-        logger.info("Parsed project config");
-
         // Read project summary from the config
-        project.summary = projectConfig.summary;
-
-        // Project configuration
-        temp.parser = projectConfig.parser;
-        temp.ignore = projectConfig.ignore;
+        project.summary = project.config.summary;
 
         // Clean the repository directory from irrelevant files
-        return helpers.directory.clean(temp.paths.repo, temp.ignore);
+        return helpers.directory.clean(temp.paths.repo, project.config.ignore || []);
 
     }).then(function(deletedFilesNum){
 
         logger.info("Deleted " + deletedFilesNum + " irrelevant files");
 
-        return parsers.run(temp.paths.root, temp.parser);
+        return parsers.run(temp.paths.root, project.config.parser);
 
     }).then(function(compounds){
 
-        logger.info("Parsed project sources using " + temp.parser + " parser");
+        logger.info("Parsed project sources using " + project.config.parser + " parser");
 
-        switch (temp.parser){
+        switch (project.config.parser){
 
             case 'jsdoc':
             case 'doxygen':
