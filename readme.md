@@ -1,7 +1,12 @@
 # Ethereum Documentation Generator
 
-## Installation
+## Available parsers
 
+- `jsdoc` for JSDoc comments
+- `doxygen` for C/C++ projects
+- `marked` for GitHub flavoured Markdown
+
+## Installation
 - Clone the repository
 - Install node packages: `npm install`
 - Configure environment:
