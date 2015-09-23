@@ -94,7 +94,7 @@ function pushEvent(payload){
                 };
                 return database.createReference(version, project, compounds);
 
-            case 'markdown':
+            case 'marked':
                 return database.createWiki(project, compounds);
 
         }
