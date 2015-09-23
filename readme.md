@@ -11,7 +11,7 @@
   - **wikis** (ex. `$(cat ~/wikis.json)`)
 - Run application: `node main.js`
 
-### Example `~/projects.json`
+#### Example `~/projects.json`
 ```
 {
   "libweb3jsonrpc": {
@@ -31,7 +31,7 @@
 }
 ```
 
-### Example `~/wikis.json`
+#### Example `~/wikis.json`
 ```
 {
   "ethereum-wiki": {
