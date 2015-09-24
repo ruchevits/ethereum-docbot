@@ -14,6 +14,9 @@
   - **port** (ex. `3001`)
   - **projects** (ex. `$(cat ~/projects.json)`)
   - **wikis** (ex. `$(cat ~/wikis.json)`)
+- Install required CLI tools
+  - doxygen
+  - xsltproc
 - Run application: `node main.js`
 
 #### Example `~/projects.json`
