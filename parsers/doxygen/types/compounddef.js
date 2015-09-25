@@ -104,15 +104,15 @@ function compounddefType(compounddef){
 
 
 
-    // TODO: Brief description (0:1)
-    /*if (compounddef.$('briefdescription').length){
+    // Brief description (0:1)
+    if (compounddef.$('briefdescription').length){
         compound.summary.description = types.description(compounddef.$('briefdescription').children[0]);
     }
 
-    // TODO: Detailed description (0:1)
+    // Detailed description (0:1)
     if (compounddef.$('detaileddescription').length){
         compound.body.description = types.description(compounddef.$('detaileddescription').children[0]);
-    }*/
+    }
 
 
 

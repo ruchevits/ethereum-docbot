@@ -229,6 +229,41 @@ function codelineType(element){
 
 }
 
+function descriptionType(element){
+
+    var description = {};
+
+    // Title (0:1)
+    if (element.$('title').length){
+        console.log("descriptionType > title")
+        //description.title = element.$('title').text();
+    }
+
+    // Para (0:N)
+    element.$('para').forEach(function(paragraph){
+        description.html = description.html || '';
+        description.html += docParaType(paragraph);
+        //description.paragraphs = description.paragraphs || [];
+        //description.paragraphs.push(docParaType(paragraph));
+    });
+
+    // Type 1 sections (0:N)
+    element.$('sect1').forEach(function(paragraph){
+        console.log("descriptionType > sect1");
+        //description.sections = description.sections || [];
+        //description.sections.push(docSect1Type(paragraph));
+    });
+
+    // Internal (0:1)
+    if (element.$('internal').length){
+        console.log("descriptionType > internal");
+        //description.internal = docInternalType(element.$('internal').children[0]);
+    }
+
+    return description;
+
+}
+
 // TODO: graphType
 function graphType(element){
     return 0;
@@ -254,44 +289,6 @@ function childnodeType(element){
 function referenceType(element){
     //console.log(element)
     return 0;
-}
-
-// TODO: descriptionType
-function descriptionType(element){
-
-    var description = {};
-
-    /*
-     // Title (0:1)
-     if (element.$('title').length){
-     //description.title = element.$('title').text();
-     console.log("descriptionType title!!!")
-     }
-
-     // Para (0:N)
-     element.$('para').forEach(function(paragraph){
-     description.html = description.html || '';
-     description.html += docParaType(paragraph);
-     //description.paragraphs = description.paragraphs || [];
-     //description.paragraphs.push(docParaType(paragraph));
-     });
-
-     // Type 1 sections (0:N)
-     element.$('sect1').forEach(function(paragraph){
-     //description.sections = description.sections || [];
-     //description.sections.push(docSect1Type(paragraph));
-     console.log("descriptionType sect1!!!")
-     });
-
-     // Internal (0:1)
-     if (element.$('internal').length){
-     //description.internal = docInternalType(element.$('internal').children[0]);
-     console.log("descriptionType internal!!!")
-     }
-     */
-
-    return description;
-
 }
 
 // TODO: refType
@@ -328,21 +325,8 @@ function docCmdGroup(element){
 
     switch (element.name){
 
-        case 'linebreak':
-        case 'hruler':
-            return docEmptyType(element);
-
-        case 'preformatted':
-            return docMarkupType(element);
-
-        case 'programlisting':
-            return listingType(element);
-
-        case 'verbatim':
-            return element;
-
-        case 'indexentry':
-            return docIndexEntryType(element);
+        case 'variablelist':
+            return docVariableListType(element);
 
         case 'orderedlist':
         case 'itemizedlist':
@@ -351,38 +335,59 @@ function docCmdGroup(element){
         case 'simplesect':
             return docSimpleSectType(element);
 
-        case 'title':
-            return docTitleType(element);
+        case 'xrefsect':
+            // TODO: xrefsect
+            return '';
+            //return docXRefSectType(element);
 
-        case 'variablelist':
-            return docVariableListType(element);
-
-        case 'table':
-            return docTableType(element);
-
-        case 'heading':
-            return docHeadingType(element);
-
-        case 'image':
-            return docImageType(element);
-
-        case 'dotfile':
-            return docDotFileType(element);
-
-        case 'toclist':
-            return docTocListType(element);
-
-        case 'language':
-            return docLanguageType(element);
+        case 'programlisting':
+            // TODO: programlisting
+            return '';
+            //return listingType(element);
 
         case 'parameterlist':
-            return docParamListType(element);
+            // TODO: parameterlist
+            return '';
+            //return docParamListType(element);
 
-        case 'xrefsect':
-            return docXRefSectType(element);
+
+
+        case 'linebreak':
+        case 'hruler':
+            //return docEmptyType(element);
+
+        case 'preformatted':
+            //return docMarkupType(element);
+
+        case 'verbatim':
+            //return element;
+
+        case 'indexentry':
+            //return docIndexEntryType(element);
+
+        case 'title':
+            //return docTitleType(element);
+
+        case 'table':
+            //return docTableType(element);
+
+        case 'heading':
+            //return docHeadingType(element);
+
+        case 'image':
+            //return docImageType(element);
+
+        case 'dotfile':
+            //return docDotFileType(element);
+
+        case 'toclist':
+            //return docTocListType(element);
+
+        case 'language':
+            //return docLanguageType(element);
 
         case 'copydoc':
-            return docCopyType(element);
+            //return docCopyType(element);
 
         default:
             return docTitleCmdGroup(element);
@@ -395,8 +400,14 @@ function docTitleCmdGroup(element){
 
     switch (element.name) {
 
+        case 'ref':
+            return docRefTextType(element);
+
         case 'ulink':
             return docURLLink(element);
+
+        case 'anchor':
+            return docAnchorType(element);
 
         case 'bold':
         case 'emphasis':
@@ -410,16 +421,10 @@ function docTitleCmdGroup(element){
         case 'htmlonly':
         case 'latexonly':
         case 'dot':
-            return element;
-
-        case 'anchor':
-            return docAnchorType(element);
+            //return element;
 
         case 'formula':
-            return docFormulaType(element);
-
-        case 'ref':
-            return docRefTextType(element);
+            //return docFormulaType(element);
 
         case 'copy':
         case 'trademark':
@@ -431,7 +436,7 @@ function docTitleCmdGroup(element){
         case 'ndash':
         case 'mdash':
         case 'nonbreakablespace':
-            return docEmptyType(element);
+            //return docEmptyType(element);
 
         case 'umlaut':
         case 'acute':
@@ -442,98 +447,352 @@ function docTitleCmdGroup(element){
         case 'cedil':
         case 'ring':
         case 'szlig':
-            return docCharType(element);
+            //return docCharType(element);
 
         default:
             logger.warning('Not implemented: ' + element.name);
+            return '';
 
     }
 
 }
 
-function docURLLink(element){
+function docParaType(element){
 
-    var link = '';
+    var paragraph = {
+        type: 'paragraph',
+        text: ''
+    };
 
     element.children.forEach(function(child){
 
-        if (!child.name) {
-            link += '['+child+']('+element.attrs.url+')';
-            //link.body.push(child);
+        if (typeof child === 'string' || child instanceof String) {
+
+            paragraph.text += child;
+
         } else {
-            //link.body.push(docTitleCmdGroup(child));
-            console.log('docURLLink !!!')
+
+            paragraph.text += docCmdGroup(child);
+
         }
 
     });
 
-    return link;
+    var tokens = [paragraph];
+    tokens.links = {};
+
+    //console.log(marked.parser(tokens))
+
+    return marked.parser(tokens);
+
+}
+
+function docRefTextType(element){
+
+    // TOOD: kindref, external
+    //element.attrs.kindref
+    //element.attrs.external
+
+    var html = '';
+
+    element.children.forEach(function(child){
+
+        if (typeof child === 'string' || child instanceof String) {
+            html += child;
+        } else {
+            html += docTitleCmdGroup(child);
+        }
+
+    });
+
+    return generateLink(html, localizeRefLink(element.attrs.refid));
+
+}
+
+function docURLLink(element){
+
+    var html = '';
+
+    element.children.forEach(function(child){
+
+        if (typeof child === 'string' || child instanceof String) {
+            html += child;
+        } else {
+            html += docTitleCmdGroup(child);
+        }
+
+    });
+
+    return generateLink(html, element.attrs.url);
+
+}
+
+function docVariableListType(element){
+
+    var html = '<ul>';
+
+    element.children.forEach(function(child){
+
+        html += docVariableListGroup(child);
+
+    });
+
+    html += '</ul>';
+
+    return html;
+
+}
+
+function docVariableListGroup(element){
+
+    var html = '';
+
+    if (element.name == 'varlistentry') {
+
+        html += docVarListEntryType(element);
+
+    } else if (element.name == 'listitem') {
+
+        html += docListItemType(element);
+
+    } else {
+
+        console.log('docVariableListGroup > else')
+
+    }
+
+    return html;
+
+}
+
+function docVarListEntryType(element){
+
+    var html = '<li>';
+
+    element.children.forEach(function(child){
+
+        html += docTitleType(child);
+
+    });
+
+    html += '</li>';
+
+    return html;
+
+}
+
+function docTitleType(element){
+
+    var html = '';
+
+    element.children.forEach(function(child){
+
+        if (typeof child === 'string' || child instanceof String) {
+
+            html += child;
+
+        } else {
+
+            html += docTitleCmdGroup(child);
+
+        }
+
+    });
+
+    return html;
+
+}
+
+function docListItemType(element){
+
+    var html = '<li>';
+
+    element.$('para').forEach(function(child){
+
+        html += docParaType(child);
+
+    });
+
+    html += '</li>';
+
+    return html;
+
+}
+
+// TODO: review docAnchorType
+function docAnchorType(element){
+
+    return generateLink('ANCHOR', '#' + element.attrs.id);
+
+}
+
+function docListType(element){
+
+    var html = '<ul>';
+
+    element.children.forEach(function(child){
+
+        html += docListItemType(child);
+
+    });
+
+    html += '</ul>';
+
+    return html;
+
+}
+
+function docSimpleSectType(element){
+
+    var html = '<section class="' + element.attrs.kind + '">';
+
+    element.children.forEach(function(child){
+
+        if (child.name == 'para') {
+
+            html += docParaType(child);
+
+        } else {
+
+            console.log('docSimpleSectType > else');
+
+        }
+
+    });
+
+    html += '</section>';
+
+    return html;
+
+    /*
+    <xsd:element name="title" type="docTitleType" minOccurs="0" />
+    <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+        <xsd:element name="para" type="docParaType" minOccurs="1" maxOccurs="unbounded" />
+        <xsd:element name="simplesectsep" type="docEmptyType" minOccurs="0"/>
+    </xsd:sequence>
+    */
 
 }
 
 function docMarkupType(element){
 
-    var markup = '';
+    var html = '';
+
+    switch (element.name) {
+
+        case 'bold':
+            html += '<b>';
+            break;
+
+        case 'emphasis':
+            html += '<em>';
+            break;
+
+        case 'computeroutput':
+            html += '<pre>';
+            break;
+
+        case 'subscript':
+            html += '<sub>';
+            break;
+
+        case 'superscript':
+            html += '<sup>';
+            break;
+
+        case 'center':
+            html += '<center>';
+            break;
+
+        case 'small':
+            html += '<small>';
+            break;
+
+    }
 
     element.children.forEach(function(child){
 
-        if (!child.name) {
-            console.log('docMarkupType');
-            console.log(child);
-            markup += child;
+        if (typeof child === 'string' || child instanceof String) {
+
+            html += child;
+
         } else {
-            console.log('docMarkupType !!!');
-            //markup.body.push(docCmdGroup(child));
+
+            html += docCmdGroup(child);
+
         }
 
     });
 
-    return markup;
+    switch (element.name) {
+
+        case 'bold':
+            html += '</b>';
+            break;
+
+        case 'emphasis':
+            html += '</em>';
+            break;
+
+        case 'computeroutput':
+            html += '</pre>';
+            break;
+
+        case 'subscript':
+            html += '</sub>';
+            break;
+
+        case 'superscript':
+            html += '</sup>';
+            break;
+
+        case 'center':
+            html += '</center>';
+            break;
+
+        case 'small':
+            html += '</small>';
+            break;
+
+    }
+
+    return html;
 
 }
 
-function docAnchorType(element){
-    return 0;
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function docFormulaType(element){
     return 0;
-}
-
-function docRefTextType(element){
-
-    return {
-        type: 'link',
-        text: '<a href="'+element.attrs.refid+'">REF_TEXT</a>'
-    };
-
-    /*return {
-     type: 'text',
-     text: '<a href="'+element.attrs.refid+'">REF_TEXT</a>'
-     };*/
-
-    /*console.log(element)
-
-     var ref = {
-     type: element.name,
-     refid: element.attrs.refid,
-     kindref: element.attrs.kindref,
-     external: element.attrs.external,
-     body: []
-     };
-
-     element.children.forEach(function(child){
-
-     if (!child.name) {
-     ref.body.push(child);
-     } else {
-     ref.body.push(docTitleCmdGroup(child));
-     }
-
-     });
-
-     return ref;*/
-
 }
 
 function docCharType(element){
@@ -546,58 +805,12 @@ function docEmptyType(element){
     //return '['+element.attrs.name+']';
 }
 
-function docTitleType(element){
-    console.log('docTitleType');
-    return 0;
-}
-
 function docIndexEntryType(element){
     console.log('docIndexEntryType');
     return 0;
 }
 
-function docSimpleSectType(element){
 
-    var kind = element.attrs.kind;
-
-    var section = '<section class="' + kind + '">';
-
-    element.children.forEach(function(child){
-
-        switch (child.name) {
-
-            case 'para':
-                section += docParaType(child);
-                break;
-
-            case 'simplesectsep':
-                section += ' ';
-                break;
-
-        }
-
-    });
-
-    section += '</section>';
-
-    return section;
-
-}
-
-function docVarListEntryType(element){
-    console.log('docVarListEntryType');
-    return 0;
-}
-
-function docVariableListGroup(element){
-    console.log('docVariableListGroup');
-    return 0;
-}
-
-function docVariableListType(element){
-    console.log('docVariableListType');
-    return 0;
-}
 
 function docImageType(element){
     console.log('docImageType');
@@ -681,44 +894,6 @@ function docHeadingType(element){
 
 }
 
-function docListType(element){
-
-    /*var list = {
-     type: element.name,
-     items: []
-     };*/
-
-    // List items (1:N)
-    /*element.$('listitem').children.forEach(function(child){
-     list.items.push(docListItemType(child));
-     });*/
-
-    /*element.children.forEach(function(child){
-     if (child.name == 'listitem') {
-     list.items.push(docListItemType(child));
-     }
-     });*/
-
-    return 0;
-
-}
-
-function docListItemType(element){
-
-    var listitem = {
-        type: element.name,
-        paragraphs: []
-    };
-
-    // Paragraphs (1:N)
-    element.$('para').children.forEach(function(paragraph){
-        listitem.paragraphs.push(docParaType(paragraph));
-    });
-
-    return listitem;
-
-}
-
 function docTableType(element){
 
     var table = {
@@ -784,34 +959,7 @@ function docEntryType(element){
 
 }
 
-function docParaType(element){
 
-    var paragraph = {
-        type: 'text',
-        text: ''
-    };
-
-    element.children.forEach(function(child){
-
-        if (!child.name) {
-            paragraph.text += child + ' ';
-        } else if (child.name == 'para') {
-            /*paragraph.push(
-                docParaType(child)
-            );*/
-            console.log('docParaType !!!');
-        } else {
-            paragraph.text += docCmdGroup(child) + ' ';
-        }
-
-    });
-
-    var tokens = [paragraph];
-    tokens.links = {};
-
-    return marked.parser(tokens);
-
-}
 
 function docSect1Type(element){
 
@@ -1131,3 +1279,12 @@ module.exports = {
     CmdGroup: docCmdGroup,
     TitleCmdGroup: docTitleCmdGroup
 };
+
+// TODO: localizeRefLink
+function localizeRefLink(link){
+    return '/TODO/' + link;
+}
+
+function generateLink(text, href){
+    return '[' + text + '](' + href + ')';
+}
