@@ -207,20 +207,6 @@ function refTextType(element){
 
 }
 
-function listingType(element){
-
-    var codelines = [];
-
-    element.children.forEach(function(child){
-
-        codelines.push(codelineType(child));
-
-    });
-
-    return codelines;
-
-}
-
 function codelineType(element){
 
     console.log(element)
@@ -336,19 +322,15 @@ function docCmdGroup(element){
             return docSimpleSectType(element);
 
         case 'xrefsect':
-            // TODO: xrefsect
-            return '';
-            //return docXRefSectType(element);
+            return docXRefSectType(element);
+
+        case 'parameterlist':
+            return docParamListType(element);
 
         case 'programlisting':
             // TODO: programlisting
             return '';
             //return listingType(element);
-
-        case 'parameterlist':
-            // TODO: parameterlist
-            return '';
-            //return docParamListType(element);
 
 
 
@@ -489,7 +471,7 @@ function docParaType(element){
 
 function docRefTextType(element){
 
-    // TOOD: kindref, external
+    // TODO: kindref, external
     //element.attrs.kindref
     //element.attrs.external
 
@@ -505,7 +487,9 @@ function docRefTextType(element){
 
     });
 
-    return generateLink(html, localizeRefLink(element.attrs.refid));
+    return '<a href="#" ng-click="ref(\'' + element.attrs.refid + '\')">' + html + '</a>';
+
+    //return generateLink(html, localizeRefLink(element.attrs.refid));
 
 }
 
@@ -760,9 +744,114 @@ function docMarkupType(element){
 
 }
 
+function docXRefSectType(element){
+
+    //element.attrs.id
+
+    var html = '';
+
+    element.children.forEach(function(child){
+
+        if (child.name == 'xreftitle') {
+
+            html += child;
+
+        } else if (child.name == 'xrefdescription') {
+
+            var description = descriptionType(child);
+
+            html += description.html;
+
+        }
+
+    });
+
+    return html;
+
+}
+
+function docParamListType(element){
+
+    //element.attrs.kind
+
+    var html = '';
+
+    element.children.forEach(function(child){
+
+        html += docParamListItem(child);
+
+    });
+
+    console.log(html)
+
+    return html;
+
+}
+
+function docParamListItem(element){
+
+    var html = '';
+
+    element.children.forEach(function(child){
+
+        if (child.name == 'parameternamelist') {
+
+            html += docParamNameList(child);
+
+        } else if (child.name == 'parameterdescription') {
+
+            var description = descriptionType(child);
+
+            html += description.html;
+
+        }
+
+    });
+
+    return html;
+
+}
+
+function docParamNameList(element){
+
+    var html = '';
+
+    element.children.forEach(function(child){
+
+        html += docParamName(child);
+
+    });
+
+    return html;
+
+}
+
+function docParamName(element){
+
+    //element.attrs.direction
+
+    var html = '';
 
 
+    element.children.forEach(function(child){
 
+        var refText = refTextType(child);
+
+        /*
+        name: element.children[0],
+        refid: element.attrs.refid,
+        kindref: element.attrs.kindref,
+        external: element.attrs.external,
+        tooltip: element.attrs.tooltip
+        */
+
+        html += refText.name;
+
+    });
+
+    return html;
+
+}
 
 
 
@@ -834,31 +923,6 @@ function docTocListType(element){
 
 function docLanguageType(element){
     console.log('docLanguageType');
-    return 0;
-}
-
-function docParamListType(element){
-    console.log('docParamListType');
-    return 0;
-}
-
-function docParamListItem(element){
-    console.log('docParamListItem');
-    return 0;
-}
-
-function docParamNameList(element){
-    console.log('docParamNameList');
-    return 0;
-}
-
-function docParamName(element){
-    console.log('docParamName');
-    return 0;
-}
-
-function docXRefSectType(element){
-    console.log('docXRefSectType');
     return 0;
 }
 
@@ -958,8 +1022,6 @@ function docEntryType(element){
     return entry;
 
 }
-
-
 
 function docSect1Type(element){
 
@@ -1282,7 +1344,8 @@ module.exports = {
 
 // TODO: localizeRefLink
 function localizeRefLink(link){
-    return '/TODO/' + link;
+    return link;
+    //return '/TODO/' + link;
 }
 
 function generateLink(text, href){
