@@ -7,6 +7,7 @@ var DocsReferenceCompound = new mongoose.Schema({
     _project: String,
     slug: String,
     parser: String,
+    kind: String,
     summary: mongoose.Schema.Types.Mixed,
     body: mongoose.Schema.Types.Mixed
 }, {

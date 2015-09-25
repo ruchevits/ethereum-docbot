@@ -44,6 +44,8 @@ function parse(dirname) {
             if (matchedLanguage) {
                 language = matchedLanguage[1].toLowerCase();
                 slug = filename.substring(language.length + 3, filename.length - 3).toLowerCase();
+                console.log(language)
+                console.log(language)
             } else {
                 language = "english";
                 slug = filename.substring(0, filename.length - 3).toLowerCase();
