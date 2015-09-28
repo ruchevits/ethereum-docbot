@@ -22,7 +22,7 @@ function run(dirname, parser) {
                 case 'jsdoc':
                     return jsdoc.parse(dirname + '/repo');
 
-                case 'markdown':
+                case 'marked':
                     return markdown.parse(dirname + '/repo');
 
                 default:
