@@ -95,8 +95,8 @@ function compounddefType(compounddef){
 
     // Program listing (0:1)
     if (compounddef.$('programlisting').children.length){
-        console.log('compounddef > programlisting');
-        //compound.body.programlisting = types.listing(compounddef.$('programlisting').children[0]);
+        //console.log('compounddef > programlisting');
+        compound.body.programlisting = types.listing(compounddef.$('programlisting').children[0]);
     }
 
     // Brief description (0:1)

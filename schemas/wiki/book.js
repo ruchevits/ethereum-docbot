@@ -4,7 +4,8 @@ var mongoose = require('mongoose');
 
 var DocsWikiBook = new mongoose.Schema({
     slug: String,
-    summary: mongoose.Schema.Types.Mixed
+    summary: mongoose.Schema.Types.Mixed,
+    repository: mongoose.Schema.Types.Mixed
 }, {
     collection: 'DocsWikiBooks'
 });
