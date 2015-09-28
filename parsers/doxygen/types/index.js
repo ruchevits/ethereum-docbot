@@ -77,7 +77,7 @@ function locationType(element){
         line: element.attrs.line,
         bodyfile: element.attrs.bodyfile,
         bodystart: element.attrs.bodystart,
-        bodyend: element.attrs.bodyend,
+        bodyend: element.attrs.bodyend
     };
 
 }
@@ -207,13 +207,76 @@ function refTextType(element){
 
 }
 
-function codelineType(element){
+function listingType(element){
 
-    console.log(element)
+    var html = '';
 
-    return 0;
+    element.children.forEach(function(child){
+
+        html += codelineType(child);
+
+    });
+
+    html += '';
+
+    return html;
 
 }
+
+function codelineType(element){
+
+    //elements.attrs.lineno
+    //elements.attrs.refid
+    //elements.attrs.refkind
+    //elements.attrs.external
+
+    var html = '';
+
+    element.children.forEach(function(child){
+
+        html += highlightType(child);
+
+    });
+
+    html += '';
+
+    return html;
+
+}
+
+function highlightType(element){
+
+    //elements.attrs.class
+
+    var html = '';
+
+    element.children.forEach(function(child){
+
+        if (typeof child === 'string' || child instanceof String) {
+
+            html += child;
+
+        } else if (child.name == 'sp') {
+
+            html += ' ';
+
+        } else if (child.name == 'ref') {
+
+            html += refTextType(child);
+
+        }
+
+    });
+
+    html += '';
+
+    return html;
+
+}
+
+
+
+
 
 function descriptionType(element){
 
@@ -295,11 +358,6 @@ function memberRefType(element){
     return 0;
 }
 
-// TODO: highlightType
-function highlightType(element){
-    return 0;
-}
-
 // TODO: linkType
 function linkType(element){
     return 0;
@@ -328,9 +386,7 @@ function docCmdGroup(element){
             return docParamListType(element);
 
         case 'programlisting':
-            // TODO: programlisting
-            return '';
-            //return listingType(element);
+            return listingType(element);
 
 
 
@@ -781,8 +837,6 @@ function docParamListType(element){
         html += docParamListItem(child);
 
     });
-
-    console.log(html)
 
     return html;
 
