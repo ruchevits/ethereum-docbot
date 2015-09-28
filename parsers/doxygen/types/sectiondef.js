@@ -29,10 +29,10 @@ function sectiondefType(sectiondef){
 
     */
 
-    // TODO: Description (0:1)
-    /*if (sectiondef.$('description').length){
+    // Description (0:1)
+    if (sectiondef.$('description').length){
         section.body.description = types.description(sectiondef.$('description').children[0]);
-    }*/
+    }
 
     return section;
 

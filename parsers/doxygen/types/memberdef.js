@@ -35,8 +35,6 @@ function memberdefType(memberdef){
     // Name (1)
     member.body.name = memberdef.$('name').text();
 
-    /*
-
     // Definition (0:1)
     if (memberdef.$('definition').children.length){
         member.body.definition = memberdef.$('definition').children[0].text();
@@ -91,57 +89,55 @@ function memberdefType(memberdef){
         member.body.reimplementedby.push(types.reimplement(reimplement));
     });
 
-     // Enum value (0:N)
-     memberdef.$('enumvalue').forEach(function(enumvalue){
-     member.body.enumvalues = member.body.enumvalues || [];
-     member.body.enumvalues.push(types.enumvalue(enumvalue));
-     });
+    // Enum value (0:N)
+    memberdef.$('enumvalue').forEach(function(enumvalue){
+        member.body.enumvalues = member.body.enumvalues || [];
+        member.body.enumvalues.push(types.enumvalue(enumvalue));
+    });
 
-     // Parameters (0:N)
-     memberdef.$('param').forEach(function(param){
-     member.body.params = member.body.params || [];
-     member.body.params.push(types.param(param));
-     });
+    // Parameters (0:N)
+    memberdef.$('param').forEach(function(param){
+        member.body.params = member.body.params || [];
+        member.body.params.push(types.param(param));
+    });
 
-     // Type (0:1)
-     if (memberdef.$('type').children.length){
-     member.body.type = types.linkedText(memberdef.$('type').children[0]);
-     }
+    // Type (0:1)
+    if (memberdef.$('type').children.length){
+        member.body.type = types.linkedText(memberdef.$('type').children[0]);
+    }
 
-     // Initializer (0:1)
-     if (memberdef.$('initializer').children.length){
-     member.body.initializer = types.linkedText(memberdef.$('initializer').children[0]);
-     }
+    // Initializer (0:1)
+    if (memberdef.$('initializer').children.length){
+        member.body.initializer = types.linkedText(memberdef.$('initializer').children[0]);
+    }
 
-     // Exceptions (0:1)
-     if (memberdef.$('exceptions').children.length){
-     member.body.exceptions = types.linkedText(memberdef.$('exceptions').children[0]);
-     }
+    // Exceptions (0:1)
+    if (memberdef.$('exceptions').children.length){
+        member.body.exceptions = types.linkedText(memberdef.$('exceptions').children[0]);
+    }
 
-     // Location (1)
-     member.body.location = types.location(memberdef.$('location').children[0]);
+    // Location (1)
+    member.body.location = types.location(memberdef.$('location').children[0]);
 
-     // Template param list (0:1)
-     if (memberdef.$('templateparamlist').children.length){
-     member.body.templateparamlist = types.templateparamlist(memberdef.$('templateparamlist').children[0]);
-     }
-
-    */
+    // Template param list (0:1)
+    if (memberdef.$('templateparamlist').children.length){
+        member.body.templateparamlist = types.templateparamlist(memberdef.$('templateparamlist').children[0]);
+    }
 
     // TODO: Brief description (0:1)
     /*if (memberdef.$('briefdescription').length){
-        member.body.briefdescription = types.description(memberdef.$('briefdescription').children[0]);
-    }*/
+     member.body.briefdescription = types.description(memberdef.$('briefdescription').children[0]);
+     }*/
 
     // TODO: Detailed description (0:1)
     /*if (memberdef.$('detaileddescription').length){
-        member.body.detaileddescription = types.description(memberdef.$('detaileddescription').children[0]);
-    }*/
+     member.body.detaileddescription = types.description(memberdef.$('detaileddescription').children[0]);
+     }*/
 
     // TODO: In-body description (0:1)
     /*if (memberdef.$('inbodydescription').length){
-        member.body.inbodydescription = types.description(memberdef.$('inbodydescription').children[0]);
-    }*/
+     member.body.inbodydescription = types.description(memberdef.$('inbodydescription').children[0]);
+     }*/
 
     return member;
 
