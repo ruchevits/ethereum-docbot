@@ -12,8 +12,6 @@ function sectiondefType(sectiondef){
         }
     };
 
-    /*
-
     // TODO: Header (0:1)
     if (sectiondef.$('header').children.length){
         console.log('sectiondefType > header');
@@ -22,12 +20,10 @@ function sectiondefType(sectiondef){
         //section.body.header = sectiondef.$('header').children[0];
     }
 
-     // Member definitions (N)
-     sectiondef.$('memberdef').forEach(function(memberdef){
-     section.body.members.push(memberdefType(memberdef));
-     });
-
-    */
+    // Member definitions (N)
+    sectiondef.$('memberdef').forEach(function(memberdef){
+        section.body.members.push(memberdefType(memberdef));
+    });
 
     // Description (0:1)
     if (sectiondef.$('description').length){

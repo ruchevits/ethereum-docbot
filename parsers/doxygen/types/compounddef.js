@@ -56,7 +56,8 @@ function compounddefType(compounddef){
     });
 
     // List of all members (0:1)
-    if (compounddef.$('listofallmembers').children.length){
+    if (compounddef.$('listofallmembers').children.length &&
+        compounddef.$('listofallmembers').children[0].children.length){
         compound.body.listofallmembers = types.listofallmembers(compounddef.$('listofallmembers').children[0]);
     }
 
