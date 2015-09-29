@@ -274,6 +274,15 @@ function highlightType(element){
 
 }
 
+function refType(element){
+
+    return {
+        name: element.children[0],
+        slug: element.attrs.refid,
+        prot: element.attrs.prot
+    };
+
+}
 
 
 
@@ -338,19 +347,6 @@ function childnodeType(element){
 function referenceType(element){
     //console.log(element)
     return 0;
-}
-
-// TODO: refType
-function refType(element){
-
-    /*return {
-        slug: element.attrs.refid,
-        prot: element.attrs.prot,
-        name: element.text()
-    };*/
-
-    return 0;
-
 }
 
 // TODO: memberRefType

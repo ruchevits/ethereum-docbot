@@ -124,20 +124,20 @@ function memberdefType(memberdef){
         member.body.templateparamlist = types.templateparamlist(memberdef.$('templateparamlist').children[0]);
     }
 
-    // TODO: Brief description (0:1)
-    /*if (memberdef.$('briefdescription').length){
-     member.body.briefdescription = types.description(memberdef.$('briefdescription').children[0]);
-     }*/
+    // Brief description (0:1)
+    if (memberdef.$('briefdescription').length){
+        member.body.briefdescription = types.description(memberdef.$('briefdescription').children[0]);
+    }
 
-    // TODO: Detailed description (0:1)
-    /*if (memberdef.$('detaileddescription').length){
-     member.body.detaileddescription = types.description(memberdef.$('detaileddescription').children[0]);
-     }*/
+    // Detailed description (0:1)
+    if (memberdef.$('detaileddescription').length){
+        member.body.detaileddescription = types.description(memberdef.$('detaileddescription').children[0]);
+    }
 
-    // TODO: In-body description (0:1)
-    /*if (memberdef.$('inbodydescription').length){
-     member.body.inbodydescription = types.description(memberdef.$('inbodydescription').children[0]);
-     }*/
+    // In-body description (0:1)
+    if (memberdef.$('inbodydescription').length){
+        member.body.inbodydescription = types.description(memberdef.$('inbodydescription').children[0]);
+    }
 
     return member;
 
