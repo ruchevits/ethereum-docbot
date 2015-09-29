@@ -27,9 +27,9 @@ function parse(dirname) {
             compounds.push({
                 slug: filename,
                 parser: 'marked',
+                kind: 'page',
                 summary: {
-                    name: filename,
-                    kind: 'page'
+                    name: filename
                 },
                 body: {
                     language: 'english',
@@ -61,9 +61,9 @@ function parse(dirname) {
                 parsedData[i] = {
                     slug: body.name,
                     parser: 'jsdoc',
+                    kind: body.kind,
                     summary: {
-                        name: body.name,
-                        kind: body.kind
+                        name: body.name
                     },
                     body: body
                 }
