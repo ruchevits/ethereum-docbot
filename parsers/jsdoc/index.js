@@ -2,7 +2,7 @@ var Q = require('q');
 var glob = require("glob");
 var fs = require('fs-extra');
 var jsdocParse = require("jsdoc-parse");
-var marked = require('marked');
+var marked = require('meta-marked');
 
 function parse(dirname) {
 
@@ -24,18 +24,19 @@ function parse(dirname) {
 
             var data = fs.readFileSync(filepath, 'utf8');
 
+            var content = marked(data);
+
             compounds.push({
                 slug: filename,
                 parser: 'marked',
+                kind: 'page',
                 summary: {
                     name: filename,
-                    kind: 'page'
+                    meta: content.meta
                 },
                 body: {
-                    language: 'english',
                     name: filename,
-                    kind: 'page',
-                    content: marked(data)
+                    html: content.html
                 }
             });
 
@@ -61,9 +62,9 @@ function parse(dirname) {
                 parsedData[i] = {
                     slug: body.name,
                     parser: 'jsdoc',
+                    kind: body.kind,
                     summary: {
-                        name: body.name,
-                        kind: body.kind
+                        name: body.name
                     },
                     body: body
                 }

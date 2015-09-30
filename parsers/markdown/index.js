@@ -1,7 +1,7 @@
 var Q = require('q');
 var fs = require('fs-extra');
 var glob = require("glob");
-var marked = require('marked');
+var marked = require('meta-marked');
 var _ = require('lodash');
 
 var helpers = require('../../helpers');
@@ -23,7 +23,7 @@ function parse(dirname) {
 
     return Q.Promise(function(resolve, reject, notify) {
 
-        var filepaths = glob.sync("*.md", {
+        var filepaths = glob.sync("**/*.md", {
             cwd: dirname,
             realpath: true
         });
@@ -44,8 +44,6 @@ function parse(dirname) {
             if (matchedLanguage) {
                 language = matchedLanguage[1].toLowerCase();
                 slug = filename.substring(language.length + 3, filename.length - 3).toLowerCase();
-                console.log(language)
-                console.log(language)
             } else {
                 language = "english";
                 slug = filename.substring(0, filename.length - 3).toLowerCase();
@@ -53,10 +51,13 @@ function parse(dirname) {
 
             name = slug.split('-').join(' ');
 
+            var content = marked(data);
+
             if (!pages[slug]) {
                 pages[slug] = {
                     slug: slug,
                     parser: 'marked',
+                    kind: 'page',
                     summary: {},
                     body: {}
                 };
@@ -64,13 +65,12 @@ function parse(dirname) {
 
             pages[slug].summary[language] = {
                 name: name,
-                kind: 'page'
+                meta: content.meta
             };
 
             pages[slug].body[language] = {
                 name: name,
-                kind: 'page',
-                content: marked(data)
+                html: content.html
             };
 
         });
