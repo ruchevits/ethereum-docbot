@@ -40,16 +40,19 @@ function pushEvent(payload){
 
         logger.info('New commit pushed to the ' + project.destination.type + ' ' + project.destination.name);
 
+
+        temp.paths = {
+            tmpDirName: project.repository.name + '-' + Date.now()
+        };
+
         // Create a temporary directory for project
-        return helpers.directory.create.temp(config.temp + '/' + project.repository.name + '-' + Date.now());
+        return helpers.directory.create.temp(config.temp + '/' + temp.paths.tmpDirName);
 
     }).then(function(rootDir){
 
         logger.info("Created a temporary directory: " + rootDir);
 
-        temp.paths = {
-            root: rootDir
-        };
+        temp.paths.root = rootDir;
 
         // Clone the repository into a temporary directory
         return helpers.repository.clone(project.repository.clone_url, temp.paths.root + '/repo');
@@ -108,6 +111,8 @@ function pushEvent(payload){
         logger.error(err);
 
     }).done(function(){
+
+        helpers.directory.clean(config.temp, temp.paths.tmpDirName);
 
         var elapsedTime = (new Date().getTime() - startTime) / 1000;
 
