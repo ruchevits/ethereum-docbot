@@ -1,5 +1,5 @@
 var _ = require('lodash');
-var marked = require('marked');
+var marked = require('meta-marked');
 
 var logger = require('../../../logger');
 
