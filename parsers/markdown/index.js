@@ -10,16 +10,45 @@ function parse(dirname) {
 
     console.log("Parsing with Markdown files: " + dirname);
 
-    /*marked.setOptions({
-        renderer: new marked.Renderer(),
+    var renderer = new marked.Renderer();
+
+    renderer.link = function (href, title, text) {
+
+        var out = '<a href="javascript:void(0)" ng-click="openLink(\'' + href + '\')"';
+
+        if (title) {
+            out += ' title="' + title + '"';
+        }
+
+        out += '>' + text + '</a>';
+
+        return out;
+
+    };
+
+    renderer.heading = function(text, level, raw) {
+        return '<h'
+            + level
+            + ' id="'
+            + this.options.headerPrefix
+            + raw.toLowerCase().replace(/[^\w]+/g, '')
+            + '">'
+            + text
+            + '</h'
+            + level
+            + '>\n';
+    };
+
+    marked.setOptions({
+        renderer: renderer,
         gfm: true,
         tables: true,
         breaks: true,
         pedantic: false,
-        sanitize: true,
+        sanitize: false,
         smartLists: true,
         smartypants: true
-    });*/
+    });
 
     return Q.Promise(function(resolve, reject, notify) {
 
